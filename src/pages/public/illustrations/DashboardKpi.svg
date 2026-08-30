@@ -1,0 +1,28 @@
+<svg width="480" height="320" viewBox="0 0 480 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tableau de bord investisseur">
+  <rect width="480" height="320" rx="20" fill="#F1F5F9"/>
+  <!-- Operator silhouette -->
+  <circle cx="74" cy="120" r="26" fill="#16305C"/>
+  <path d="M34 188c0-26 20-44 40-44s40 18 40 44v4H34z" fill="#16305C"/>
+  <!-- Dashboard panel -->
+  <rect x="150" y="60" width="300" height="210" rx="14" fill="#FFFFFF" stroke="#16305C" stroke-width="5"/>
+  <rect x="170" y="80" width="120" height="14" rx="4" fill="#16305C" opacity="0.15"/>
+  <rect x="170" y="100" width="70" height="10" rx="3" fill="#16305C" opacity="0.1"/>
+  <!-- KPI cards -->
+  <rect x="168" y="128" width="80" height="56" rx="8" fill="#E8B23A" opacity="0.15"/>
+  <rect x="180" y="140" width="44" height="8" rx="3" fill="#E8B23A"/>
+  <rect x="180" y="158" width="56" height="10" rx="3" fill="#16305C"/>
+  <rect x="260" y="128" width="80" height="56" rx="8" fill="#16305C" opacity="0.08"/>
+  <rect x="272" y="140" width="44" height="8" rx="3" fill="#16305C"/>
+  <rect x="272" y="158" width="56" height="10" rx="3" fill="#16305C" opacity="0.6"/>
+  <rect x="352" y="128" width="80" height="56" rx="8" fill="#16305C" opacity="0.08"/>
+  <rect x="364" y="140" width="44" height="8" rx="3" fill="#16305C"/>
+  <rect x="364" y="158" width="56" height="10" rx="3" fill="#16305C" opacity="0.6"/>
+  <!-- Bar chart -->
+  <rect x="170" y="206" width="260" height="50" rx="6" fill="#F1F5F9"/>
+  <rect x="184" y="226" width="22" height="22" rx="3" fill="#E8B23A"/>
+  <rect x="216" y="214" width="22" height="34" rx="3" fill="#E8B23A"/>
+  <rect x="248" y="200" width="22" height="48" rx="3" fill="#E8B23A"/>
+  <rect x="280" y="220" width="22" height="28" rx="3" fill="#E8B23A" opacity="0.6"/>
+  <rect x="312" y="210" width="22" height="38" rx="3" fill="#E8B23A" opacity="0.6"/>
+  <rect x="344" y="216" width="22" height="32" rx="3" fill="#E8B23A" opacity="0.4"/>
+</svg>

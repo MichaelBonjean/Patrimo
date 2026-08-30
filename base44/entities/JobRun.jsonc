@@ -1,0 +1,98 @@
+{
+  "name": "JobRun",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire (isolation multi-utilisateurs, ancre RLS)"
+    },
+    "patrimony_id": {
+      "type": "string",
+      "description": "Patrimoine de rattachement (snapshot owner_id par d\u00e9faut)"
+    },
+    "job": {
+      "type": "string",
+      "enum": [
+        "rent_dues",
+        "impayes",
+        "expiring_documents",
+        "available_revision",
+        "upcoming_alerts",
+        "bank_sync",
+        "reconciliation",
+        "crd_evolution",
+        "document_classification",
+        "anomaly_detection"
+      ],
+      "description": "Job automatis\u00e9 ex\u00e9cut\u00e9 en arri\u00e8re-plan"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "description": "Cl\u00e9 d'idempotence = owner_id|job|as_of (un run par job/propri\u00e9taire/jour)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "running",
+        "success",
+        "error",
+        "skipped"
+      ],
+      "default": "running",
+      "description": "Statut d'ex\u00e9cution du job"
+    },
+    "as_of": {
+      "type": "string",
+      "format": "date",
+      "description": "Date du jour d'ex\u00e9cution (YYYY-MM-DD)"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finished_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "duration_ms": {
+      "type": "number",
+      "description": "Dur\u00e9e d'ex\u00e9cution en ms"
+    },
+    "counts": {
+      "type": "object",
+      "description": "Compteurs du job (created, skipped, alerts_created, etc.)",
+      "additionalProperties": true
+    },
+    "skip_reason": {
+      "type": "string",
+      "description": "Motif de skip (job non actif, absence de connecteur, d\u00e9j\u00e0 ex\u00e9cut\u00e9\u2026)"
+    },
+    "error_message": {
+      "type": "string"
+    },
+    "actor": {
+      "type": "string",
+      "description": "Origine du d\u00e9clenchement (cron / admin email / manual)"
+    }
+  },
+  "required": [
+    "owner_id",
+    "job",
+    "idempotency_key",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

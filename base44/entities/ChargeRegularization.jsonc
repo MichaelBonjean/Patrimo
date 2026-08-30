@@ -1,0 +1,170 @@
+{
+  "name": "ChargeRegularization",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du bailleur (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "lease_id": {
+      "type": "string",
+      "description": "ID du bail concern\u00e9"
+    },
+    "lot_id": {
+      "type": "string",
+      "description": "ID du lot (snapshot)"
+    },
+    "property_id": {
+      "type": "string",
+      "description": "ID du bien (snapshot)"
+    },
+    "year": {
+      "type": "number",
+      "description": "Exercice de r\u00e9gularisation (ann\u00e9e civile)"
+    },
+    "period": {
+      "type": "string",
+      "description": "Libell\u00e9 de p\u00e9riode (ex : 2024 ou 2024-2025)"
+    },
+    "tenant_name": {
+      "type": "string",
+      "description": "Nom du locataire (snapshot)"
+    },
+    "lot_designation": {
+      "type": "string",
+      "description": "D\u00e9signation du lot (snapshot)"
+    },
+    "property_name": {
+      "type": "string",
+      "description": "Nom du bien (snapshot)"
+    },
+    "lot_address": {
+      "type": "string",
+      "description": "Adresse du logement (snapshot)"
+    },
+    "landlord_name": {
+      "type": "string",
+      "description": "Nom du bailleur (snapshot)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "validee"
+      ],
+      "default": "draft",
+      "description": "Statut : brouillon / valid\u00e9e"
+    },
+    "provisions_collected": {
+      "type": "number",
+      "description": "Provisions encaiss\u00e9es sur la p\u00e9riode (somme RentDue.charges)"
+    },
+    "recoverable_total": {
+      "type": "number",
+      "description": "Total des charges r\u00e9cup\u00e9rables engag\u00e9es"
+    },
+    "teom_recoverable": {
+      "type": "number",
+      "description": "Partie r\u00e9cup\u00e9rable du TEOM incluse dans recoverable_total"
+    },
+    "solde": {
+      "type": "number",
+      "description": "Solde = charges r\u00e9cup\u00e9rables - provisions encaiss\u00e9es"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "du_locataire",
+        "rembourser_locataire",
+        "solde_nul"
+      ],
+      "description": "Sens du solde : d\u00fb par le locataire / \u00e0 rembourser / nul"
+    },
+    "ventilation": {
+      "type": "array",
+      "description": "Ventilation par cat\u00e9gorie de charges r\u00e9cup\u00e9rables",
+      "items": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "category_label": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "category",
+          "category_label",
+          "amount"
+        ]
+      }
+    },
+    "justificatifs": {
+      "type": "array",
+      "description": "Justificatifs conserv\u00e9s (URLs + noms)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url",
+          "filename"
+        ]
+      }
+    },
+    "due_rentdue_id": {
+      "type": "string",
+      "description": "ID de l'\u00e9ch\u00e9ance cr\u00e9\u00e9e dans le compte locataire (si solde d\u00fb par le locataire)"
+    },
+    "validation_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de validation"
+    },
+    "actor": {
+      "type": "string",
+      "description": "Email du bailleur ayant valid\u00e9"
+    },
+    "note": {
+      "type": "string",
+      "description": "Note / commentaire"
+    }
+  },
+  "required": [
+    "lease_id",
+    "year",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

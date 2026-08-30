@@ -1,0 +1,133 @@
+{
+  "name": "BankTransaction",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "patrimony_id": {
+      "type": "string",
+      "description": "Patrimoine de rattachement (ancre multi-utilisateurs). H\u00e9rit\u00e9 de l'owner_id par d\u00e9faut."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Compte bancaire source (IBAN masqu\u00e9 / identifiant compte legacy). Vide si inconnu."
+    },
+    "bank_account_id": {
+      "type": "string",
+      "description": "Cl\u00e9 \u00e9trang\u00e8re vers l'entit\u00e9 BankAccount (compte canonique). Vide si non rattach\u00e9 \u00e0 un BankAccount (ex. import sans compte d\u00e9clar\u00e9)."
+    },
+    "provider_transaction_id": {
+      "type": "string",
+      "description": "Identifiant transaction fourni par la banque (si disponible). Renforce le fingerprint."
+    },
+    "source_import_id": {
+      "type": "string",
+      "description": "ID du lot d'import (BankImport batch) ayant cr\u00e9\u00e9 cette ligne brute. Alias historique de bank_import_id."
+    },
+    "bank_import_id": {
+      "type": "string",
+      "description": "ID du lot d'import (BankImport batch) canonique. Vaut source_import_id (r\u00e9tro-compat)."
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de l'op\u00e9ration (immuable)"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Montant brut sign\u00e9 (positif = entr\u00e9e, n\u00e9gatif = sortie). Immuable."
+    },
+    "currency": {
+      "type": "string",
+      "default": "EUR",
+      "description": "Devise"
+    },
+    "raw_description": {
+      "type": "string",
+      "description": "Libell\u00e9 bancaire brut d'origine (immuable)"
+    },
+    "normalized_description": {
+      "type": "string",
+      "description": "Libell\u00e9 normalis\u00e9 (sans accents/bruit) utilis\u00e9 pour le fingerprint"
+    },
+    "fingerprint": {
+      "type": "string",
+      "description": "Hash SHA-256 stable = sha256(account_id | provider_transaction_id | date | amount | normalized_description). Cl\u00e9 de d\u00e9doublonnage exact."
+    },
+    "dedup_status": {
+      "type": "string",
+      "enum": [
+        "unique",
+        "exact",
+        "probable"
+      ],
+      "default": "unique",
+      "description": "R\u00e9sultat du d\u00e9doublonnage \u00e0 l'import : unique / exact / probable"
+    },
+    "duplicate_of": {
+      "type": "string",
+      "description": "ID BankTransaction dont celle-ci est le doublon (exact ou probable)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "linked",
+        "ignored",
+        "failed"
+      ],
+      "default": "pending",
+      "description": "State-machine brute : pending = brute non rattach\u00e9e ; linked = Transaction m\u00e9tier cr\u00e9\u00e9e et li\u00e9e ; ignored = \u00e9cart\u00e9e (doublon exact) ; failed = cr\u00e9ation m\u00e9tier a \u00e9chou\u00e9 (brute pr\u00e9serv\u00e9e, jamais supprim\u00e9e)"
+    },
+    "transaction_id": {
+      "type": "string",
+      "description": "ID de la Transaction comptable/cat\u00e9goris\u00e9e li\u00e9e (snapshot, renseign\u00e9 au passage linked)"
+    },
+    "category": {
+      "type": "string",
+      "description": "Cat\u00e9gorie canonique snapshot une fois cat\u00e9goris\u00e9e"
+    },
+    "property_id": {
+      "type": "string",
+      "description": "Bien affect\u00e9 (snapshot)"
+    },
+    "lot_id": {
+      "type": "string",
+      "description": "Lot affect\u00e9 (snapshot)"
+    },
+    "raw_data": {
+      "type": "object",
+      "description": "Snapshot JSON brut s\u00e9curis\u00e9 de la ligne d'origine (optionnel, jamais de secret bancaire en clair). Pour audit / re-extraction.",
+      "additionalProperties": true
+    }
+  },
+  "required": [
+    "account_id",
+    "date",
+    "amount",
+    "raw_description",
+    "fingerprint",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

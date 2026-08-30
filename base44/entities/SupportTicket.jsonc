@@ -1,0 +1,119 @@
+{
+  "name": "SupportTicket",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du bailleur (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de demonstration",
+      "default": false
+    },
+    "subject": {
+      "type": "string",
+      "description": "Sujet du ticket"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "aide",
+        "contact",
+        "bug"
+      ],
+      "default": "contact",
+      "description": "Nature de la demande"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "answered",
+        "closed"
+      ],
+      "default": "open",
+      "description": "Statut du ticket"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "normal",
+        "urgent"
+      ],
+      "default": "normal",
+      "description": "Priorite"
+    },
+    "page_url": {
+      "type": "string",
+      "description": "URL de la page lors de la creation (bug)"
+    },
+    "user_agent": {
+      "type": "string",
+      "description": "User-Agent du navigateur (bug)"
+    },
+    "stack_trace": {
+      "type": "string",
+      "description": "Trace d'erreur capturee (bug)"
+    },
+    "email": {
+      "type": "string",
+      "description": "Email du demandeur (snapshot = owner_id)"
+    },
+    "messages": {
+      "type": "array",
+      "description": "Fil de discussion du ticket (user / support)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string",
+            "enum": [
+              "user",
+              "support"
+            ]
+          },
+          "body": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "actor_email": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "from",
+          "body",
+          "date"
+        ]
+      }
+    },
+    "last_reply_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Dernier message (user ou support)"
+    }
+  },
+  "required": [
+    "subject",
+    "category",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

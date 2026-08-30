@@ -1,0 +1,266 @@
+{
+  "name": "Property",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "name": {
+      "type": "string",
+      "description": "Nom du bien"
+    },
+    "category": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "Maison",
+        "Appartement",
+        "Immeuble",
+        "Local commercial",
+        "Bureau",
+        "Parking",
+        "Garage",
+        "Terrain",
+        "SCPI",
+        null
+      ],
+      "description": "Cat\u00e9gorie du bien. null = non renseign\u00e9 (\u00e0 confirmer par l'utilisateur). INCONNU acceptable, jamais de valeur m\u00e9tier invent\u00e9e."
+    },
+    "address": {
+      "type": "string",
+      "description": "Adresse"
+    },
+    "postal_code": {
+      "type": "string",
+      "description": "Code postal"
+    },
+    "city": {
+      "type": "string",
+      "description": "Ville"
+    },
+    "total_surface": {
+      "type": "number",
+      "description": "Surface totale m\u00b2"
+    },
+    "holding_structure": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "En propre",
+        "SCI",
+        "SCI familiale",
+        "SARL",
+        "SAS",
+        "SCPI",
+        null
+      ],
+      "description": "Structure de d\u00e9tention. null = non renseign\u00e9 (\u00e0 confirmer). Jamais d\u00e9duit automatiquement d'un document."
+    },
+    "tax_regime": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "R\u00e9sidence principale",
+        "Location nue (revenus fonciers)",
+        "Location nue (micro-foncier)",
+        "LMNP au micro-BIC",
+        "LMNP au r\u00e9el",
+        "LMP",
+        "SCI \u00e0 l'IR",
+        "SCI \u00e0 l'IS",
+        "Pinel",
+        "Denormandie",
+        null
+      ],
+      "description": "R\u00e9gime fiscal. null = non renseign\u00e9 (\u00e0 confirmer). Ne JAMAIS d\u00e9duire le r\u00e9gime fiscal de la forme juridique ou du type de bien."
+    },
+    "sci_name": {
+      "type": "string",
+      "description": "D\u00e9nomination sociale SCI"
+    },
+    "sci_siret": {
+      "type": "string",
+      "description": "SIRET SCI"
+    },
+    "sci_capital": {
+      "type": "number",
+      "description": "Capital social SCI"
+    },
+    "sci_creation_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de cr\u00e9ation SCI"
+    },
+    "sci_bank": {
+      "type": "string",
+      "description": "Banque soci\u00e9t\u00e9 SCI"
+    },
+    "acquisition_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date d'acquisition"
+    },
+    "purchase_price": {
+      "type": "number",
+      "description": "Prix d'achat"
+    },
+    "notary_fees": {
+      "type": "number",
+      "description": "Frais de notaire"
+    },
+    "agency_fees": {
+      "type": "number",
+      "description": "Frais d'agence"
+    },
+    "initial_works": {
+      "type": "number",
+      "description": "Travaux initiaux"
+    },
+    "estimated_value": {
+      "type": "number",
+      "description": "Prix de vente estim\u00e9 actuel"
+    },
+    "loan_amount": {
+      "type": "number",
+      "description": "Montant emprunt\u00e9"
+    },
+    "down_payment": {
+      "type": "number",
+      "description": "Apport"
+    },
+    "loan_start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date d\u00e9but pr\u00eat"
+    },
+    "loan_duration_years": {
+      "type": "number",
+      "description": "Dur\u00e9e pr\u00eat (ann\u00e9es)"
+    },
+    "loan_rate": {
+      "type": "number",
+      "description": "Taux annuel hors assurance (%)"
+    },
+    "loan_deferred_months": {
+      "type": "number",
+      "description": "Nombre de mois de diff\u00e9r\u00e9 d'amortissement"
+    },
+    "monthly_payment": {
+      "type": "number",
+      "description": "Mensualit\u00e9 hors assurance"
+    },
+    "monthly_insurance": {
+      "type": "number",
+      "description": "Assurance pr\u00eat mensuelle"
+    },
+    "remaining_capital": {
+      "type": "number",
+      "description": "Capital restant d\u00fb"
+    },
+    "bank": {
+      "type": "string",
+      "description": "Banque"
+    },
+    "property_tax": {
+      "type": "number",
+      "description": "Taxe fonci\u00e8re annuelle"
+    },
+    "pno_insurance": {
+      "type": "number",
+      "description": "Assurance PNO annuelle"
+    },
+    "condo_fees": {
+      "type": "number",
+      "description": "Charges copropri\u00e9t\u00e9 annuelles"
+    },
+    "management_fees": {
+      "type": "number",
+      "description": "Frais gestion locative annuels"
+    },
+    "accountant_fees": {
+      "type": "number",
+      "description": "Frais comptable annuels"
+    },
+    "other_annual_charges": {
+      "type": "number",
+      "description": "Autres charges annuelles"
+    },
+    "landlord_address": {
+      "type": "string",
+      "description": "Adresse bailleur"
+    },
+    "landlord_phone": {
+      "type": "string",
+      "description": "T\u00e9l\u00e9phone bailleur"
+    },
+    "landlord_email": {
+      "type": "string",
+      "description": "Email bailleur"
+    },
+    "notary_contact": {
+      "type": "string",
+      "description": "Contact notaire"
+    },
+    "manager_contact": {
+      "type": "string",
+      "description": "Contact gestionnaire locatif"
+    },
+    "syndic_contact": {
+      "type": "string",
+      "description": "Contact syndic"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": {
+        "$in": [
+          "{{user.email}}",
+          "{{user.data.patrimony_id}}"
+        ]
+      }
+    },
+    "read": {
+      "data.owner_id": {
+        "$in": [
+          "{{user.email}}",
+          "{{user.data.patrimony_id}}"
+        ]
+      }
+    },
+    "update": {
+      "data.owner_id": {
+        "$in": [
+          "{{user.email}}",
+          "{{user.data.patrimony_id}}"
+        ]
+      }
+    },
+    "delete": {
+      "data.owner_id": {
+        "$in": [
+          "{{user.email}}",
+          "{{user.data.patrimony_id}}"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "properties": {
+    "role": {
+      "type": "string",
+      "description": "R\u00f4le plateforme Base44 (admin/user)",
+      "enum": [
+        "admin",
+        "user"
+      ]
+    },
+    "patrimony_id": {
+      "type": "string",
+      "description": "Cl\u00e9 de patrimoine partag\u00e9e (= email du propri\u00e9taire). Sert d'identifiant de tenant pour l'isolation multi-utilisateurs. RLS y ancre l'acc\u00e8s aux donn\u00e9es du patrimoine."
+    },
+    "patrimony_role": {
+      "type": "string",
+      "description": "R\u00f4le m\u00e9tier dans le patrimoine (contr\u00f4le d'acc\u00e8s applicatif)",
+      "enum": [
+        "OWNER",
+        "ADMIN",
+        "ASSOCIATE",
+        "ACCOUNTANT",
+        "MANAGER",
+        "READ_ONLY"
+      ]
+    },
+    "plan": {
+      "type": "string",
+      "description": "Plan souscrit (miroir de Subscription, pilot\u00e9 par les webhooks Stripe). Utilis\u00e9 par le planGate c\u00f4t\u00e9 front.",
+      "enum": [
+        "starter",
+        "pro",
+        "business"
+      ],
+      "default": "starter"
+    },
+    "subscription_status": {
+      "type": "string",
+      "description": "Statut d'abonnement (miroir Stripe) lu par le planGate / le bandeau d'essai.",
+      "enum": [
+        "none",
+        "trialing",
+        "active",
+        "past_due",
+        "canceled",
+        "ended"
+      ],
+      "default": "none"
+    },
+    "current_period_end": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Fin de p\u00e9riode pay\u00e9e (miroir Stripe current_period_end)"
+    },
+    "stripe_customer_id": {
+      "type": "string",
+      "description": "Customer Stripe (pour cr\u00e9ation des sessions Checkout/Portal)"
+    },
+    "trial_ends_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Fin de l'essai d'inscription (14j sans CB). Si vide, calcul\u00e9 \u00e0 partir de created_date."
+    },
+    "legal_acceptance": {
+      "type": "object",
+      "description": "Consentement aux documents l\u00e9gaux (CGU + confidentialit\u00e9) captur\u00e9 \u00e0 l'inscription / au premier acc\u00e8s.",
+      "additionalProperties": true,
+      "properties": {
+        "cgu_version": {
+          "type": "string"
+        },
+        "cgu_date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "confidentialite_version": {
+          "type": "string"
+        },
+        "confidentialite_date": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "pending_deletion": {
+      "type": "object",
+      "description": "Demande de suppression de compte (RGPD art. 17). status: pending | canceled | purged.",
+      "additionalProperties": true,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "canceled",
+            "purged"
+          ]
+        },
+        "requested_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "scheduled_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "cancel_token": {
+          "type": "string"
+        },
+        "canceled_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "purged_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "onboarding": {
+      "type": "object",
+      "description": "\u00c9tat de l'onboarding guid\u00e9 novice (wizard /bienvenue). Persist\u00e9 via auth.updateMe.",
+      "additionalProperties": true,
+      "properties": {
+        "completed": {
+          "type": "boolean",
+          "default": false
+        },
+        "mode_expert": {
+          "type": "boolean",
+          "default": false
+        },
+        "context": {
+          "type": "string",
+          "enum": [
+            "physique",
+            "sci",
+            "mix"
+          ]
+        },
+        "notify_impayes": {
+          "type": "boolean"
+        },
+        "notify_quittances": {
+          "type": "boolean"
+        },
+        "completed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  },
+  "required": [
+    "role"
+  ],
+  "name": "User",
+  "type": "object"
+}

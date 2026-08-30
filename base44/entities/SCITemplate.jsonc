@@ -1,0 +1,53 @@
+{
+  "name": "SCITemplate",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "sci_name": {
+      "type": "string",
+      "description": "D\u00e9nomination sociale"
+    },
+    "sci_siret": {
+      "type": "string",
+      "description": "SIRET"
+    },
+    "sci_capital": {
+      "type": "number",
+      "description": "Capital social"
+    },
+    "sci_creation_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de cr\u00e9ation"
+    },
+    "sci_bank": {
+      "type": "string",
+      "description": "Banque soci\u00e9t\u00e9"
+    }
+  },
+  "required": [
+    "sci_name"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

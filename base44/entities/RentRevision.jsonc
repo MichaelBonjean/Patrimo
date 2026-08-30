@@ -1,0 +1,134 @@
+{
+  "name": "RentRevision",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du bailleur (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "lease_id": {
+      "type": "string",
+      "description": "ID du bail concern\u00e9"
+    },
+    "lot_id": {
+      "type": "string",
+      "description": "ID du lot (snapshot)"
+    },
+    "property_id": {
+      "type": "string",
+      "description": "ID du bien (snapshot)"
+    },
+    "indexation_type": {
+      "type": "string",
+      "enum": [
+        "IRL",
+        "ILC",
+        "ILAT",
+        "aucune"
+      ],
+      "description": "Indice de r\u00e9f\u00e9rence utilis\u00e9"
+    },
+    "reference_quarter": {
+      "type": "string",
+      "description": "Trimestre/ann\u00e9e de r\u00e9f\u00e9rence de l'indice initial (ex: T1 2024)"
+    },
+    "old_rent": {
+      "type": "number",
+      "description": "Loyer HC actuel avant r\u00e9vision"
+    },
+    "old_index_value": {
+      "type": "number",
+      "description": "Valeur de l'indice de r\u00e9f\u00e9rence initial"
+    },
+    "new_index_value": {
+      "type": "number",
+      "description": "Derni\u00e8re valeur connue de l'indice courant"
+    },
+    "new_rent": {
+      "type": "number",
+      "description": "Loyer th\u00e9orique apr\u00e8s r\u00e9vision"
+    },
+    "variation_amount": {
+      "type": "number",
+      "description": "Variation en \u20ac"
+    },
+    "variation_percent": {
+      "type": "number",
+      "description": "Variation en %"
+    },
+    "formula": {
+      "type": "string",
+      "description": "Formule de calcul explicite affich\u00e9e au bailleur"
+    },
+    "new_revision_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date possible de prochaine r\u00e9vision (anniversaire)"
+    },
+    "blocked_reason": {
+      "type": "string",
+      "description": "Motif de blocage \u00e9ventuel (aucune indexation, DPE F/G, indices manquants, non \u00e9ligibilit\u00e9)"
+    },
+    "can_apply": {
+      "type": "boolean",
+      "description": "R\u00e9vision imm\u00e9diatement applicable (\u00e9ligible, indices pr\u00e9sents, non bloqu\u00e9e)",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposition",
+        "validee",
+        "refusee",
+        "appliquee"
+      ],
+      "default": "proposition",
+      "description": "Statut du workflow : proposition / validee / refusee / appliquee"
+    },
+    "new_amount": {
+      "type": "number",
+      "description": "Nouveau montant valid\u00e9 par le bailleur (snapshot du loyer appliqu\u00e9)"
+    },
+    "validated_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de validation par le bailleur"
+    },
+    "applied_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date d'application effective au bail"
+    },
+    "actor": {
+      "type": "string",
+      "description": "Email du bailleur ayant agi"
+    },
+    "note": {
+      "type": "string",
+      "description": "Note / justification"
+    }
+  },
+  "required": [
+    "lease_id",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

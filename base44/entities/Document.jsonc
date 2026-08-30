@@ -1,0 +1,223 @@
+{
+  "name": "Document",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du bailleur (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "title": {
+      "type": "string",
+      "description": "Nom / libell\u00e9 du document"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL du fichier stock\u00e9 (UploadFile)"
+    },
+    "filename": {
+      "type": "string",
+      "description": "Nom du fichier d'origine"
+    },
+    "mime_type": {
+      "type": "string",
+      "description": "Type MIME du fichier"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "bail",
+        "etat_des_lieux",
+        "quittance",
+        "facture",
+        "acte",
+        "taxe_fonciere",
+        "dpe",
+        "assurance",
+        "pret",
+        "ag_copropriete",
+        "releve_bancaire",
+        "autre"
+      ],
+      "default": "autre",
+      "description": "Type de document"
+    },
+    "property_id": {
+      "type": "string",
+      "description": "Bien li\u00e9 (optionnel)"
+    },
+    "lot_id": {
+      "type": "string",
+      "description": "Lot li\u00e9 (optionnel)"
+    },
+    "lease_id": {
+      "type": "string",
+      "description": "Bail li\u00e9 (optionnel)"
+    },
+    "tenant_id": {
+      "type": "string",
+      "description": "Locataire li\u00e9 (id dans lease.tenants[] / lot.tenants[], optionnel)"
+    },
+    "tenant_name": {
+      "type": "string",
+      "description": "Nom du locataire li\u00e9 (snapshot)"
+    },
+    "holder_id": {
+      "type": "string",
+      "description": "D\u00e9tenteur / structure li\u00e9 (optionnel)"
+    },
+    "transaction_id": {
+      "type": "string",
+      "description": "Transaction li\u00e9e (optionnel)"
+    },
+    "impaye_id": {
+      "type": "string",
+      "description": "Impay\u00e9 li\u00e9 (optionnel)"
+    },
+    "loan_id": {
+      "type": "string",
+      "description": "Pr\u00eat li\u00e9 (convention 'loan:<property_id>', optionnel)"
+    },
+    "document_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date du document"
+    },
+    "expiration_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date d'expiration (assurance, DPE, bail\u2026)"
+    },
+    "tags": {
+      "type": "array",
+      "description": "Tags libres",
+      "items": {
+        "type": "string"
+      }
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "upload",
+        "import",
+        "email",
+        "manuel"
+      ],
+      "default": "upload",
+      "description": "Origine du document"
+    },
+    "version": {
+      "type": "string",
+      "description": "Version du document (ex: v1, 2024-03)"
+    },
+    "supplier": {
+      "type": "string",
+      "description": "Fournisseur / \u00e9metteur ( assureur, banque, notaire\u2026)"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Montant \u00e9ventuel (facture, taxe\u2026)"
+    },
+    "commentaire": {
+      "type": "string",
+      "description": "Commentaire libre"
+    },
+    "ai_proposal": {
+      "type": "object",
+      "description": "Proposition de l'IA (extraction metadata)",
+      "additionalProperties": true,
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "property_id": {
+          "type": "string"
+        },
+        "lot_id": {
+          "type": "string"
+        },
+        "lease_id": {
+          "type": "string"
+        },
+        "tenant_id": {
+          "type": "string"
+        },
+        "holder_id": {
+          "type": "string"
+        },
+        "transaction_id": {
+          "type": "string"
+        },
+        "impaye_id": {
+          "type": "string"
+        },
+        "loan_id": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "document_date": {
+          "type": "string"
+        },
+        "expiration_date": {
+          "type": "string"
+        },
+        "supplier": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "confidence": {
+          "type": "number"
+        },
+        "rationale": {
+          "type": "string"
+        }
+      }
+    },
+    "ai_validated": {
+      "type": "boolean",
+      "description": "Proposition IA valid\u00e9e automatiquement (confiance \u00e9lev\u00e9e)",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending_review",
+        "valide"
+      ],
+      "default": "pending_review",
+      "description": "Statut : \u00e0 valider (confiance IA faible) / valid\u00e9"
+    },
+    "actor": {
+      "type": "string",
+      "description": "Email du bailleur ayant agi"
+    }
+  },
+  "required": [
+    "title",
+    "file_url",
+    "type",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

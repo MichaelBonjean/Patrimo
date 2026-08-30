@@ -1,0 +1,233 @@
+{
+  "name": "Impaye",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "rent_due_id": {
+      "type": "string",
+      "description": "ID de l'\u00e9ch\u00e9ance (RentDue) \u00e0 l'origine de l'impay\u00e9 \u2014 cl\u00e9 naturelle (1 impay\u00e9 par \u00e9ch\u00e9ance)"
+    },
+    "lease_id": {
+      "type": "string",
+      "description": "ID du bail concern\u00e9"
+    },
+    "lot_id": {
+      "type": "string",
+      "description": "ID du lot concern\u00e9"
+    },
+    "property_id": {
+      "type": "string",
+      "description": "ID du bien concern\u00e9"
+    },
+    "tenant_name": {
+      "type": "string",
+      "description": "Nom du locataire (snapshot)"
+    },
+    "tenant_email": {
+      "type": "string",
+      "description": "Email du locataire (snapshot)"
+    },
+    "tenant_address": {
+      "type": "string",
+      "description": "Adresse du logement (snapshot)"
+    },
+    "property_name": {
+      "type": "string",
+      "description": "Nom du bien (snapshot)"
+    },
+    "lot_designation": {
+      "type": "string",
+      "description": "D\u00e9signation du lot (snapshot)"
+    },
+    "expected_amount": {
+      "type": "number",
+      "description": "Montant initial d\u00fb (loyer HC + charges + suppl.) = RentDue.total_due \u00e0 la d\u00e9tection"
+    },
+    "initial_amount": {
+      "type": "number",
+      "description": "Montant initial de la dette locative (snapshot de total_due \u00e0 la d\u00e9tection)"
+    },
+    "paid_amount": {
+      "type": "number",
+      "description": "Total r\u00e9ellement encaiss\u00e9s et affect\u00e9s (CAF + locataire + garant + assurance)",
+      "default": 0
+    },
+    "missing_amount": {
+      "type": "number",
+      "description": "Reste \u00e0 payer = solde d\u00e9biteur de l'\u00e9ch\u00e9ance (positif seulement)"
+    },
+    "outstanding_amount": {
+      "type": "number",
+      "description": "Solde d\u00e9biteur courant de la dette locative (identique \u00e0 missing_amount tant que non r\u00e9sorb\u00e9)"
+    },
+    "year": {
+      "type": "number",
+      "description": "Ann\u00e9e de la p\u00e9riode"
+    },
+    "month": {
+      "type": "number",
+      "description": "Mois (1-12)"
+    },
+    "period": {
+      "type": "string",
+      "description": "P\u00e9riode YYYY-MM"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "echeance_impayee",
+        "rappel_amiable",
+        "deuxieme_relance",
+        "mise_en_demeure_amiable",
+        "dossier_professionnel",
+        "r\u00e9gularis\u00e9",
+        "abandonn\u00e9"
+      ],
+      "default": "echeance_impayee",
+      "description": "\u00c9tape du workflow de recouvrement"
+    },
+    "detected_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de premi\u00e8re d\u00e9tection de l'impay\u00e9"
+    },
+    "first_unpaid_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Premi\u00e8re date d'impay\u00e9 (= date d'\u00e9ch\u00e9ance RentDue.due_date)"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date d'\u00e9ch\u00e9ance (RentDue.due_date)"
+    },
+    "late_days": {
+      "type": "number",
+      "description": "Nombre de jours de retard (aujourd'hui - due_date)",
+      "default": 0
+    },
+    "last_relance_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de la derni\u00e8re action de recouvrement"
+    },
+    "regularized_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de r\u00e9gularisation (dette sold\u00e9e)"
+    },
+    "action_history": {
+      "type": "array",
+      "description": "Historique horodat\u00e9 de toutes les actions de recouvrement",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "stage": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "actor": {
+            "type": "string",
+            "enum": [
+              "bailleur",
+              "professionnel",
+              "systeme"
+            ]
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "email",
+              "courrier_lrar",
+              "manuel",
+              "gener\u00e9",
+              "telechargement",
+              "transmission",
+              "paiement",
+              "note"
+            ]
+          },
+          "note": {
+            "type": "string"
+          },
+          "document_url": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "date",
+          "stage",
+          "actor"
+        ]
+      }
+    },
+    "relance_history": {
+      "type": "array",
+      "description": "LEGACY \u2014 remplac\u00e9 par action_history. Conserv\u00e9 pour r\u00e9tro-compatibilit\u00e9 lecture.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "type": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "rent_due_id",
+    "lease_id",
+    "lot_id",
+    "property_id",
+    "tenant_name",
+    "expected_amount",
+    "initial_amount",
+    "missing_amount",
+    "outstanding_amount",
+    "year",
+    "month",
+    "period",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

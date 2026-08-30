@@ -1,0 +1,83 @@
+{
+  "name": "TransactionAllocation",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire (isolation multi-utilisateurs, ancre RLS)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "patrimony_id": {
+      "type": "string",
+      "description": "Patrimoine de rattachement (snapshot owner_id)"
+    },
+    "source_transaction_id": {
+      "type": "string",
+      "description": "ID de la Transaction source ventil\u00e9e. La source reste INTACTE \u2014 la ventilation est une couche d'analyse, jamais une d\u00e9formation de la transaction bancaire."
+    },
+    "target_type": {
+      "type": "string",
+      "enum": [
+        "property",
+        "lot",
+        "holder",
+        "loan"
+      ],
+      "description": "Nature de la cible de ventilation"
+    },
+    "target_id": {
+      "type": "string",
+      "description": "ID de la cible (Property / Lot / Holder / Loan)"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Montant ventil\u00e9 vers cette cible (toujours positif). \u03a3(amount) doit \u00e9galer le montant absolu de la Transaction source."
+    },
+    "percent": {
+      "type": "number",
+      "description": "Quote-part en % (0-100). \u03a3(percent) = 100."
+    },
+    "method": {
+      "type": "string",
+      "enum": [
+        "equal",
+        "proportional",
+        "manual"
+      ],
+      "description": "M\u00e9thode de ventilation : \u00e9galitaire / proportionnelle (poids) / manuelle."
+    },
+    "weight": {
+      "type": "number",
+      "description": "Poids utilis\u00e9 pour la ventilation proportionnelle (ex: surface, loyer). Snapshot informatif."
+    },
+    "note": {
+      "type": "string",
+      "description": "Note"
+    }
+  },
+  "required": [
+    "source_transaction_id",
+    "target_type",
+    "target_id",
+    "amount",
+    "method"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

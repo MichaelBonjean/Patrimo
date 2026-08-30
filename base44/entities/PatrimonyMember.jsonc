@@ -1,0 +1,96 @@
+{
+  "name": "PatrimonyMember",
+  "type": "object",
+  "properties": {
+    "patrimony_id": {
+      "type": "string",
+      "description": "Cl\u00e9 du patrimoine (= email du OWNER). Identifiant de tenant partag\u00e9."
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email du membre (cl\u00e9 naturelle: 1 membre par email par patrimoine)"
+    },
+    "full_name": {
+      "type": "string",
+      "description": "Nom affich\u00e9 du membre"
+    },
+    "patrimony_role": {
+      "type": "string",
+      "enum": [
+        "OWNER",
+        "ADMIN",
+        "ASSOCIATE",
+        "ACCOUNTANT",
+        "MANAGER",
+        "READ_ONLY"
+      ],
+      "description": "R\u00f4le m\u00e9tier du membre dans le patrimoine"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "invited",
+        "active",
+        "revoked"
+      ],
+      "default": "invited",
+      "description": "Statut d'acc\u00e8s: invit\u00e9 / actif / r\u00e9voqu\u00e9"
+    },
+    "invited_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date d'invitation"
+    },
+    "activated_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date d'activation (premi\u00e8re connexion du membre)"
+    },
+    "revoked_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date de r\u00e9vocation"
+    },
+    "added_by": {
+      "type": "string",
+      "description": "Email de l'utilisateur qui a invit\u00e9 le membre"
+    },
+    "allowed_holders": {
+      "type": "array",
+      "description": "Pour le r\u00f4le ASSOCIATE: structures (holder_id) autoris\u00e9es. Vide = aucune restriction structurelle au-del\u00e0 du patrimoine.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "note": {
+      "type": "string",
+      "description": "Note / commentaire"
+    }
+  },
+  "required": [
+    "patrimony_id",
+    "user_email",
+    "patrimony_role",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "data.patrimony_id": "{{user.data.patrimony_id}}"
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

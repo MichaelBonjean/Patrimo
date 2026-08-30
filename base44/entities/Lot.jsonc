@@ -1,0 +1,253 @@
+{
+  "name": "Lot",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "property_id": {
+      "type": "string",
+      "description": "ID du bien parent"
+    },
+    "code": {
+      "type": "string",
+      "description": "Code du lot"
+    },
+    "designation": {
+      "type": "string",
+      "description": "D\u00e9signation"
+    },
+    "floor": {
+      "type": "string",
+      "description": "\u00c9tage"
+    },
+    "typology": {
+      "type": "string",
+      "enum": [
+        "Studio",
+        "T1",
+        "T1bis",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6+",
+        "Maison",
+        "Local commercial",
+        "Bureau",
+        "Parking",
+        "Garage",
+        "Box",
+        "Cave",
+        "Terrain",
+        "T2 en Duplex",
+        "T3 en Duplex",
+        "T4 en Duplex"
+      ],
+      "description": "Typologie"
+    },
+    "surface": {
+      "type": "number",
+      "description": "Surface m\u00b2"
+    },
+    "lease_type": {
+      "type": "string",
+      "enum": [
+        "Vide-Nu",
+        "Meubl\u00e9",
+        "Bail commercial",
+        "Bail mobilit\u00e9",
+        "Bail \u00e9tudiant",
+        "Saisonnier-Airbnb",
+        "Bail mixte",
+        "Courte dur\u00e9e"
+      ],
+      "description": "Type de bail"
+    },
+    "tenants": {
+      "type": "array",
+      "description": "Locataires actuels du lot",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "entry_date": {
+            "type": "string"
+          },
+          "exit_date": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tenant_name": {
+      "type": "string",
+      "description": "Locataire actuel (legacy)"
+    },
+    "tenant_entry_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date d'entr\u00e9e locataire (legacy)"
+    },
+    "tenant_exit_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de sortie locataire (legacy)"
+    },
+    "rent_excluding_charges": {
+      "type": "number",
+      "description": "Loyer HC"
+    },
+    "charges": {
+      "type": "number",
+      "description": "Charges"
+    },
+    "deposit": {
+      "type": "number",
+      "description": "Caution"
+    },
+    "tenant_email": {
+      "type": "string",
+      "description": "Email locataire (legacy)"
+    },
+    "tenant_phone": {
+      "type": "string",
+      "description": "T\u00e9l\u00e9phone locataire (legacy)"
+    },
+    "comment": {
+      "type": "string",
+      "description": "Commentaire"
+    },
+    "is_vacant": {
+      "type": "boolean",
+      "description": "Lot vacant",
+      "default": false
+    },
+    "dpe_class": {
+      "type": "string",
+      "enum": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G"
+      ],
+      "description": "Classe DPE"
+    },
+    "ges_class": {
+      "type": "string",
+      "enum": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G"
+      ],
+      "description": "Classe GES"
+    },
+    "dpe_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date du DPE"
+    },
+    "energy_consumption": {
+      "type": "number",
+      "description": "Consommation \u00e9nergie kWh/m\u00b2/an"
+    },
+    "furnished": {
+      "type": "boolean",
+      "description": "Meubl\u00e9"
+    },
+    "access_code": {
+      "type": "string",
+      "description": "Digicode / acc\u00e8s"
+    },
+    "revenues": {
+      "type": "array",
+      "description": "Revenus r\u00e9guliers du lot",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "monthly_amount": {
+            "type": "number"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "previous_tenants": {
+      "type": "array",
+      "description": "Historique anciens locataires",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "entry_date": {
+            "type": "string"
+          },
+          "exit_date": {
+            "type": "string"
+          },
+          "rent": {
+            "type": "number"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "property_id",
+    "designation"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

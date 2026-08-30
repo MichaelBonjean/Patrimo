@@ -1,0 +1,44 @@
+{
+  "name": "Purger les comptes supprim\u00e9s",
+  "description": "Purge quotidienne des comptes en attente de suppression depuis plus de 30 jours (RGPD art. 17).",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 3 * * *",
+      "one_time_date": null,
+      "timezone": "Europe/Paris",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "purger_comptes_supprimes",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "purge": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "processPendingDeletions"
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Purger les comptes",
+            "description": "> 30j apr\u00e8s demande de suppression"
+          }
+        }
+      }
+    ]
+  }
+}

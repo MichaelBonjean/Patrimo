@@ -1,0 +1,126 @@
+{
+  "name": "TenantAccess",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du bailleur (propri\u00e9taire de l'app)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "lot_id": {
+      "type": "string",
+      "description": "ID du lot concern\u00e9"
+    },
+    "property_id": {
+      "type": "string",
+      "description": "ID du bien concern\u00e9 (coh\u00e9rence de cha\u00eene v\u00e9rifi\u00e9e \u00e0 chaque requ\u00eate)"
+    },
+    "lease_id": {
+      "type": "string",
+      "description": "ID du bail autoris\u00e9 (ancre la cha\u00eene TenantAccess \u2192 Lease \u2192 Lot \u2192 Property \u2192 Owner)"
+    },
+    "tenant_id": {
+      "type": "string",
+      "description": "ID du locataire dans lot.tenants[]"
+    },
+    "tenant_name": {
+      "type": "string",
+      "description": "Nom du locataire (snapshot)"
+    },
+    "email": {
+      "type": "string",
+      "description": "Email du locataire (destinataire du lien magique)"
+    },
+    "magic_token": {
+      "type": "string",
+      "description": "Jeton brut (LEGACY \u2014 conserv\u00e9 pour r\u00e9tro-compatibilit\u00e9 des liens d\u00e9j\u00e0 \u00e9mis. Les nouveaux tokens ne stockent que token_hash)"
+    },
+    "token_hash": {
+      "type": "string",
+      "description": "Empreinte SHA-256 (pr\u00e9fix\u00e9e) du jeton. Cl\u00e9 de recherche: le jeton brut n'est plus stock\u00e9 pour les nouveaux acc\u00e8s."
+    },
+    "token_version": {
+      "type": "number",
+      "description": "Version du jeton (incr\u00e9ment\u00e9e \u00e0 chaque rotation)",
+      "default": 1
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date de cr\u00e9ation du jeton"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date d'expiration du jeton (NON prolong\u00e9e automatiquement \u00e0 chaque visite)"
+    },
+    "issued_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date d'\u00e9mission (date simple, legacy)"
+    },
+    "revoked_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date de r\u00e9vocation (null = jeton actif). Toute valeur non nulle bloque l'acc\u00e8s."
+    },
+    "last_used_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Dernier usage effectif du jeton (renseign\u00e9 sans prolonger l'expiration)"
+    },
+    "last_accessed_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Dernier acc\u00e8s (legacy, alias de last_used_at)"
+    },
+    "failed_attempts": {
+      "type": "number",
+      "description": "Tentatives \u00e9chou\u00e9es cons\u00e9cutives (cha\u00eene cass\u00e9e / lot manquant). Auto-r\u00e9vocation au-del\u00e0 du seuil.",
+      "default": 0
+    }
+  },
+  "required": [
+    "lot_id",
+    "email",
+    "expires_at"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": {
+        "$in": [
+          "{{user.email}}",
+          "{{user.data.patrimony_id}}"
+        ]
+      }
+    },
+    "read": {
+      "data.owner_id": {
+        "$in": [
+          "{{user.email}}",
+          "{{user.data.patrimony_id}}"
+        ]
+      }
+    },
+    "update": {
+      "data.owner_id": {
+        "$in": [
+          "{{user.email}}",
+          "{{user.data.patrimony_id}}"
+        ]
+      }
+    },
+    "delete": {
+      "data.owner_id": {
+        "$in": [
+          "{{user.email}}",
+          "{{user.data.patrimony_id}}"
+        ]
+      }
+    }
+  }
+}

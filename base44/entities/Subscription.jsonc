@@ -1,0 +1,94 @@
+{
+  "name": "Subscription",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "ID de l'utilisateur propri\u00e9taire (User.id). Cr\u00e9\u00e9/mis \u00e0 jour par les webhooks Stripe (service role)."
+    },
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire (snapshot, isolation multi-utilisateurs \u2014 ancre RLS comme les autres entit\u00e9s)"
+    },
+    "plan": {
+      "type": "string",
+      "enum": [
+        "starter",
+        "pro",
+        "business"
+      ],
+      "default": "starter",
+      "description": "Plan souscrit"
+    },
+    "stripe_customer_id": {
+      "type": "string",
+      "description": "Customer Stripe li\u00e9"
+    },
+    "stripe_subscription_id": {
+      "type": "string",
+      "description": "Subscription Stripe li\u00e9e"
+    },
+    "price_id": {
+      "type": "string",
+      "description": "Price Stripe (snapshot) \u2014 sert \u00e0 d\u00e9duire le plan via STRIPE_PRICE_*"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "none",
+        "trialing",
+        "active",
+        "past_due",
+        "canceled",
+        "ended"
+      ],
+      "default": "none",
+      "description": "Statut de l'abonnement (miroir de Stripe)"
+    },
+    "current_period_end": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Fin de p\u00e9riode en cours (Stripe current_period_end)"
+    },
+    "cancel_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Annulation pr\u00e9vue \u00e0 (Stripe cancel_at)"
+    },
+    "canceled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date d'annulation effective (Stripe canceled_at)"
+    },
+    "trial_ends_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Fin de l'essai Stripe (trial_end)"
+    },
+    "past_due_since": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date du premier \u00e9chec de paiement (grille de downgrade 7j)"
+    }
+  },
+  "required": [
+    "user_id",
+    "owner_id",
+    "plan",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

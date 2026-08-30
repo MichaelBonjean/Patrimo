@@ -1,0 +1,174 @@
+{
+  "name": "Holder",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "name": {
+      "type": "string",
+      "description": "D\u00e9nomination sociale / nom du d\u00e9teneur"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Personne physique",
+        "SCI",
+        "SCI familiale",
+        "SARL",
+        "SARL de famille",
+        "SAS",
+        "SASU",
+        "EURL",
+        "SCPI",
+        "Soci\u00e9t\u00e9 civile",
+        "Holding",
+        "Indivision",
+        "Autre soci\u00e9t\u00e9"
+      ],
+      "description": "Forme du d\u00e9teneur (personne physique / structure juridique)"
+    },
+    "legal_form": {
+      "type": "string",
+      "description": "Forme juridique fine (ex: SCI, SARL, SAS, SASU, EURL, Soci\u00e9t\u00e9 civile). Plus pr\u00e9cise que `type` pour l'affichage et la fiscalit\u00e9."
+    },
+    "trade_name": {
+      "type": "string",
+      "description": "Nom commercial \u00e9ventuel (enseigne)"
+    },
+    "email": {
+      "type": "string",
+      "description": "Email"
+    },
+    "phone": {
+      "type": "string",
+      "description": "T\u00e9l\u00e9phone"
+    },
+    "address": {
+      "type": "string",
+      "description": "Adresse (si\u00e8ge social pour une structure)"
+    },
+    "siren": {
+      "type": "string",
+      "description": "SIREN (cl\u00e9 de matching prioritaire des soci\u00e9t\u00e9s)"
+    },
+    "siret": {
+      "type": "string",
+      "description": "SIRET du si\u00e8ge (si disponible)"
+    },
+    "rcs_number": {
+      "type": "string",
+      "description": "Num\u00e9ro RCS"
+    },
+    "rcs_city": {
+      "type": "string",
+      "description": "Ville du greffe d'immatriculation"
+    },
+    "capital": {
+      "type": "number",
+      "description": "Capital social (si structure)"
+    },
+    "capital_type": {
+      "type": "string",
+      "enum": [
+        "fixe",
+        "variable"
+      ],
+      "description": "Capital fixe ou variable"
+    },
+    "total_shares": {
+      "type": "number",
+      "description": "Nombre total de parts / actions \u00e9mises"
+    },
+    "par_value": {
+      "type": "number",
+      "description": "Valeur nominale d'une part / action"
+    },
+    "creation_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de constitution / cr\u00e9ation"
+    },
+    "registration_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date d'immatriculation au RCS"
+    },
+    "registered_office": {
+      "type": "string",
+      "description": "Adresse du si\u00e8ge social (d\u00e9normalis\u00e9e du greffe)"
+    },
+    "objet_social": {
+      "type": "string",
+      "description": "Objet social"
+    },
+    "duration_end": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de fin de la soci\u00e9t\u00e9 (dur\u00e9e)"
+    },
+    "fiscal_year_end": {
+      "type": "string",
+      "description": "Date de cl\u00f4ture d'exercice (MM-DD)"
+    },
+    "representative_name": {
+      "type": "string",
+      "description": "Repr\u00e9sentant l\u00e9gal (g\u00e9rant / pr\u00e9sident)"
+    },
+    "tax_regime": {
+      "type": "string",
+      "description": "R\u00e9gime fiscal SI ET SEULEMENT SI explicitement \u00e9tabli par une source fiable. Sinon vide = 'non renseign\u00e9'. Ne JAMAIS d\u00e9duire la fiscalit\u00e9 de la forme juridique."
+    },
+    "bank": {
+      "type": "string",
+      "description": "Banque (si structure)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes"
+    },
+    "members": {
+      "type": "array",
+      "description": "LEGACY \u2014 Remplac\u00e9 par l'entit\u00e9 HolderMember (mod\u00e8le canonique de d\u00e9tention imbriqu\u00e9e). Ne plus \u00e9crire. Conserv\u00e9 uniquement pour la migration one-shot.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "holder_id": {
+            "type": "string"
+          },
+          "share_percent": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "holder_id",
+          "share_percent"
+        ]
+      }
+    }
+  },
+  "required": [
+    "name",
+    "type"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

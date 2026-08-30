@@ -1,0 +1,180 @@
+{
+  "name": "Quittance",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "lease_id": {
+      "type": "string",
+      "description": "ID du bail source du compte locataire (ledger)"
+    },
+    "rent_due_id": {
+      "type": "string",
+      "description": "ID de l'\u00e9ch\u00e9ance (RentDue) \u00e0 l'origine de la quittance"
+    },
+    "lot_id": {
+      "type": "string",
+      "description": "ID du lot concern\u00e9 (snapshot)"
+    },
+    "property_id": {
+      "type": "string",
+      "description": "ID du bien concern\u00e9 (snapshot)"
+    },
+    "year": {
+      "type": "number",
+      "description": "Ann\u00e9e de la quittance"
+    },
+    "month": {
+      "type": "number",
+      "description": "Mois (1-12)"
+    },
+    "period": {
+      "type": "string",
+      "description": "P\u00e9riode au format YYYY-MM"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "full",
+        "partial"
+      ],
+      "default": "full",
+      "description": "Type : quittance int\u00e9grale (full) ou re\u00e7u partiel (partial)"
+    },
+    "rent_hc": {
+      "type": "number",
+      "description": "Snapshot : loyer hors charges de l'\u00e9ch\u00e9ance"
+    },
+    "charges": {
+      "type": "number",
+      "description": "Snapshot : charges de l'\u00e9ch\u00e9ance"
+    },
+    "additional_amount": {
+      "type": "number",
+      "description": "Snapshot : provisions / frais suppl\u00e9mentaires de l'\u00e9ch\u00e9ance"
+    },
+    "assurance": {
+      "type": "number",
+      "description": "Snapshot (legacy) : acompte assurance loyers impay\u00e9s (= additional_amount)"
+    },
+    "total_due": {
+      "type": "number",
+      "description": "Snapshot : total d\u00fb pour la p\u00e9riode ( RentDue.total_due )"
+    },
+    "paid_amount": {
+      "type": "number",
+      "description": "Snapshot : total r\u00e9ellement r\u00e9gl\u00e9 (somme des paiements affect\u00e9s)"
+    },
+    "balance": {
+      "type": "number",
+      "description": "Snapshot : reste \u00e0 payer (total_due - paid_amount)"
+    },
+    "total": {
+      "type": "number",
+      "description": "Snapshot : total pay\u00e9 encaiss\u00e9 (= paid_amount, conserv\u00e9 pour r\u00e9tro-compatibilit\u00e9 UI/PDF)"
+    },
+    "landlord_name": {
+      "type": "string",
+      "description": "Snapshot : nom du bailleur"
+    },
+    "landlord_address": {
+      "type": "string",
+      "description": "Snapshot : adresse du bailleur"
+    },
+    "tenant_name": {
+      "type": "string",
+      "description": "Snapshot : nom du locataire"
+    },
+    "tenant_address": {
+      "type": "string",
+      "description": "Snapshot : adresse du logement (locataire)"
+    },
+    "property_name": {
+      "type": "string",
+      "description": "Snapshot : nom du bien"
+    },
+    "lot_designation": {
+      "type": "string",
+      "description": "Snapshot : d\u00e9signation du lot"
+    },
+    "lot_address": {
+      "type": "string",
+      "description": "Snapshot : adresse du logement"
+    },
+    "receipt_number": {
+      "type": "string",
+      "description": "Num\u00e9ro de quittance"
+    },
+    "payment_method": {
+      "type": "string",
+      "description": "Snapshot : moyen de paiement r\u00e9el (issu des Payment)"
+    },
+    "payment_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Snapshot : date du paiement r\u00e9el (jamais hardcod\u00e9e 1er du mois)"
+    },
+    "legal_note": {
+      "type": "string",
+      "description": "Snapshot : mention l\u00e9gale en vigueur \u00e0 la g\u00e9n\u00e9ration (immutabilit\u00e9)"
+    },
+    "issue_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de g\u00e9n\u00e9ration de la quittance"
+    },
+    "sent_by_email": {
+      "type": "boolean",
+      "description": "Envoy\u00e9e par email",
+      "default": false
+    },
+    "sent_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date d'envoi"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "generated",
+        "sent",
+        "failed"
+      ],
+      "default": "generated",
+      "description": "Statut d'\u00e9mission"
+    }
+  },
+  "required": [
+    "lot_id",
+    "property_id",
+    "year",
+    "month",
+    "kind",
+    "total_due",
+    "paid_amount",
+    "receipt_number",
+    "tenant_name",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

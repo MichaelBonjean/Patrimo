@@ -1,0 +1,139 @@
+{
+  "name": "Alert",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du bailleur (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "loyer_impaye",
+        "paiement_non_rapproche",
+        "bail_expirant",
+        "indexation_disponible",
+        "dpe",
+        "assurance",
+        "echeance_fiscale",
+        "ag_copropriete",
+        "echeance_credit",
+        "document_manquant",
+        "anomalie_financiere",
+        "echeance_loyer",
+        "echeance_sci"
+      ],
+      "description": "Source / type d'alerte"
+    },
+    "linked_type": {
+      "type": "string",
+      "enum": [
+        "property",
+        "lot",
+        "lease",
+        "impaye",
+        "payment",
+        "bank_transaction",
+        "document",
+        "rent_revision",
+        "transaction",
+        "holder",
+        "none"
+      ],
+      "description": "Nature de l'objet li\u00e9"
+    },
+    "linked_id": {
+      "type": "string",
+      "description": "ID de l'objet li\u00e9 (vide si none)"
+    },
+    "linked_label": {
+      "type": "string",
+      "description": "Libell\u00e9 lisible de l'objet li\u00e9 (snapshot)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Titre court de l'alerte"
+    },
+    "message": {
+      "type": "string",
+      "description": "Description / d\u00e9tail de l'alerte"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date d'occurrence / d'\u00e9ch\u00e9ance de l'alerte"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "information",
+        "a_traiter",
+        "important",
+        "urgent"
+      ],
+      "description": "Niveau de priorit\u00e9"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "resolved",
+        "ignored",
+        "snoozed"
+      ],
+      "default": "active",
+      "description": "Statut: active / trait\u00e9e / ignor\u00e9e / report\u00e9e"
+    },
+    "recommended_action": {
+      "type": "string",
+      "description": "Action recommand\u00e9e \u00e0 mener"
+    },
+    "action_url": {
+      "type": "string",
+      "description": "Route d'action directe dans l'app (/impayes, /biens/:id\u2026)"
+    },
+    "snooze_until": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de fin de report (si statut 'snoozed')"
+    },
+    "resolved_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de traitement (r\u00e9solution / ignore)"
+    },
+    "actor": {
+      "type": "string",
+      "description": "Email du bailleur ayant agi"
+    },
+    "fingerprint": {
+      "type": "string",
+      "description": "Empreinte de d\u00e9doublonnage stable (source|linked_type:linked_id|detail)"
+    }
+  },
+  "required": [
+    "source",
+    "priority",
+    "status",
+    "fingerprint"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

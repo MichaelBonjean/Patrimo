@@ -1,0 +1,106 @@
+{
+  "name": "MonthClose",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du bailleur (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "period": {
+      "type": "string",
+      "description": "P\u00e9riode YYYY-MM (cl\u00e9 naturelle)"
+    },
+    "year": {
+      "type": "number",
+      "description": "Ann\u00e9e"
+    },
+    "month": {
+      "type": "number",
+      "description": "Mois (1-12)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "review",
+        "closed"
+      ],
+      "default": "open",
+      "description": "Statut de cl\u00f4ture : open / review / closed"
+    },
+    "closed_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de cl\u00f4ture"
+    },
+    "summary": {
+      "type": "object",
+      "description": "Snapshot du r\u00e9sum\u00e9 \u00e0 la cl\u00f4ture (attendu, encaiss\u00e9, impay\u00e9s, cash-flow\u2026)",
+      "additionalProperties": true
+    },
+    "history": {
+      "type": "array",
+      "description": "Journal horodat\u00e9 des cl\u00f4tures et r\u00e9ouvertures (toute r\u00e9ouverture est historis\u00e9e)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "close",
+              "reopen"
+            ]
+          },
+          "actor": {
+            "type": "string"
+          },
+          "from_status": {
+            "type": "string"
+          },
+          "to_status": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "date",
+          "action",
+          "actor",
+          "from_status",
+          "to_status"
+        ]
+      }
+    }
+  },
+  "required": [
+    "period",
+    "year",
+    "month",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

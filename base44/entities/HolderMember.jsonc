@@ -1,0 +1,100 @@
+{
+  "name": "HolderMember",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "parent_holder_id": {
+      "type": "string",
+      "description": "D\u00e9teneur structure parent (ex: la SCI qui poss\u00e8de les parts)"
+    },
+    "member_holder_id": {
+      "type": "string",
+      "description": "D\u00e9teneur membre/associ\u00e9 de la structure parent"
+    },
+    "share_percent": {
+      "type": "number",
+      "description": "Part de l'associ\u00e9 dans la structure parent (%)"
+    },
+    "total_shares": {
+      "type": "number",
+      "description": "Nombre de parts/actions d\u00e9tenues \u00e0 l'instant (snapshot au moment de la relation)"
+    },
+    "voting_rights": {
+      "type": "number",
+      "description": "Droits de vote (%) si diff\u00e9rents de la part \u00e9conomique"
+    },
+    "quality": {
+      "type": "string",
+      "enum": [
+        "associe",
+        "actionnaire",
+        "usufruitier",
+        "nu_proprietaire",
+        "gerant",
+        "president",
+        "autre"
+      ],
+      "default": "associe",
+      "description": "Qualit\u00e9 du membre dans la structure"
+    },
+    "demembrement": {
+      "type": "string",
+      "enum": [
+        "pleine_propriete",
+        "usufruit",
+        "nue_propriete"
+      ],
+      "default": "pleine_propriete",
+      "description": "D\u00e9membrement de propri\u00e9t\u00e9 des parts. Ne jamais r\u00e9duire silencieusement un d\u00e9membrement \u00e0 100 % pleine propri\u00e9t\u00e9."
+    },
+    "entry_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date d'entr\u00e9e dans la structure (d\u00e9but d'effet de la relation)"
+    },
+    "exit_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de sortie (cessation, cession). Null = relation toujours active. Conserv\u00e9e pour l'historique de d\u00e9tention (qui d\u00e9tenait quoi \u00e0 une date)."
+    },
+    "source_document_id": {
+      "type": "string",
+      "description": "ID du DocumentImport source de la relation (provenance / tra\u00e7abilit\u00e9)"
+    },
+    "source_page": {
+      "type": "number",
+      "description": "Page du document source de la relation"
+    },
+    "change_reason": {
+      "type": "string",
+      "description": "Motif du changement (cession, augmentation, entr\u00e9e, sortie)"
+    }
+  },
+  "required": [
+    "parent_holder_id",
+    "member_holder_id",
+    "share_percent"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

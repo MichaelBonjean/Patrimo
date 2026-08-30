@@ -1,0 +1,47 @@
+{
+  "name": "G\u00e9n\u00e9rer les \u00e9ch\u00e9ances de loyer",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 6 1 * *",
+      "one_time_date": null,
+      "timezone": "Europe/Paris",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "description": "G\u00e9n\u00e8re automatiquement les \u00e9ch\u00e9ances mensuelles (RentDue) des baux actifs le 1er de chaque mois.",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "generer_echeances_loyer",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "generate": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "generateRentDues",
+            "args": {
+              "forward_months": 1
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "G\u00e9n\u00e9rer les \u00e9ch\u00e9ances",
+            "description": "Baux actifs \u2014 mois courant + suivant"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "name": "D\u00e9tection des impay\u00e9s",
+  "description": "Le 10 de chaque mois, d\u00e9tecte les lots dont le loyer du mois n'a pas \u00e9t\u00e9 encaiss\u00e9 et cr\u00e9e une entit\u00e9 Impay\u00e9 au statut 'd\u00e9tect\u00e9'.",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 8 10 * *",
+      "one_time_date": null,
+      "timezone": "Europe/Paris",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "detection_impayes",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "detecter": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "detectImpayes",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "D\u00e9tecter les impay\u00e9s",
+            "description": "Cr\u00e9ation des Impay\u00e9s pour la p\u00e9riode courante"
+          }
+        }
+      }
+    ]
+  }
+}

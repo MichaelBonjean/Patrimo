@@ -1,0 +1,87 @@
+{
+  "name": "AuditLog",
+  "type": "object",
+  "properties": {
+    "patrimony_id": {
+      "type": "string",
+      "description": "Cl\u00e9 du patrimoine sur lequel l'action a eu lieu"
+    },
+    "actor_email": {
+      "type": "string",
+      "description": "Qui: email de l'auteur de l'action"
+    },
+    "actor_role": {
+      "type": "string",
+      "description": "R\u00f4le patrimoine de l'auteur au moment de l'action (snapshot)"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "create",
+        "update",
+        "delete",
+        "import",
+        "reconcile",
+        "quittance",
+        "financial_change",
+        "admin_access",
+        "other"
+      ],
+      "description": "Nature de l'action sensible"
+    },
+    "entity_type": {
+      "type": "string",
+      "description": "Type d'objet concern\u00e9 (Property, Lease, Quittance, MonthClose, PatrimonyMember\u2026)"
+    },
+    "entity_id": {
+      "type": "string",
+      "description": "ID de l'objet concern\u00e9"
+    },
+    "entity_label": {
+      "type": "string",
+      "description": "Libell\u00e9 lisible de l'objet (snapshot)"
+    },
+    "details": {
+      "type": "object",
+      "description": "D\u00e9tails contextualis\u00e9s de l'action (avant/apr\u00e8s, montants, p\u00e9riode\u2026)",
+      "additionalProperties": true
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Quand: horodatage de l'action"
+    },
+    "ip": {
+      "type": "string",
+      "description": "Adresse IP source (x-forwarded-for)"
+    },
+    "user_agent": {
+      "type": "string",
+      "description": "User-Agent source"
+    }
+  },
+  "required": [
+    "patrimony_id",
+    "actor_email",
+    "action",
+    "date"
+  ],
+  "rls": {
+    "read": {
+      "data.patrimony_id": "{{user.data.patrimony_id}}"
+    },
+    "create": {
+      "data.patrimony_id": "{{user.data.patrimony_id}}"
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

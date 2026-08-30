@@ -1,0 +1,44 @@
+{
+  "name": "Purger documents anciens",
+  "description": "R\u00e9tention RGPD des imports IA : fichier original supprim\u00e9 apr\u00e8s 90 j (ocr_text conserv\u00e9), imports rejet\u00e9s purg\u00e9s apr\u00e8s 30 j. Quotidien \u00e0 3h.",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 3 * * *",
+      "one_time_date": null,
+      "timezone": "Europe/Paris",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "purger_documents_anciens",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "purge": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "purgeOldDocuments"
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Purger les documents anciens",
+            "description": "R\u00e9tention 90 j (fichier) / 30 j (rejet\u00e9)"
+          }
+        }
+      }
+    ]
+  }
+}

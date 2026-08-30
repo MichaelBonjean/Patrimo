@@ -1,0 +1,52 @@
+{
+  "name": "UserMilestone",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "first_property_added",
+        "first_import",
+        "first_quittance",
+        "first_impaye_resolved",
+        "first_month_closed",
+        "5_properties",
+        "12_months_active",
+        "first_ai_import"
+      ],
+      "description": "Identifiant du milestone d\u00e9clench\u00e9"
+    },
+    "first_time_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date/heure du premier d\u00e9clenchement (unique par utilisateur)"
+    }
+  },
+  "required": [
+    "kind",
+    "first_time_at"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

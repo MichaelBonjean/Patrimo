@@ -1,0 +1,119 @@
+{
+  "name": "Incident",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du bailleur"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "lot_id": {
+      "type": "string",
+      "description": "ID du lot concern\u00e9"
+    },
+    "property_id": {
+      "type": "string",
+      "description": "ID du bien concern\u00e9"
+    },
+    "tenant_name": {
+      "type": "string",
+      "description": "Nom du locataire d\u00e9clarant (snapshot)"
+    },
+    "reported_by_email": {
+      "type": "string",
+      "description": "Email du d\u00e9clarant"
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "portail",
+        "manuel",
+        "auto"
+      ],
+      "default": "portail",
+      "description": "Canal de d\u00e9claration"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Objet du signalement"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description d\u00e9taill\u00e9e"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ouvert",
+        "en_cours",
+        "r\u00e9solu",
+        "ferm\u00e9"
+      ],
+      "default": "ouvert",
+      "description": "Statut de l'incident"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "basse",
+        "normale",
+        "haute",
+        "urgente"
+      ],
+      "default": "normale",
+      "description": "Priorit\u00e9"
+    },
+    "resolved_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de r\u00e9solution"
+    },
+    "internal_note": {
+      "type": "string",
+      "description": "Note interne bailleur"
+    }
+  },
+  "required": [
+    "lot_id",
+    "subject",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": {
+        "$in": [
+          "{{user.email}}",
+          "{{user.data.patrimony_id}}"
+        ]
+      }
+    },
+    "read": {
+      "data.owner_id": {
+        "$in": [
+          "{{user.email}}",
+          "{{user.data.patrimony_id}}"
+        ]
+      }
+    },
+    "update": {
+      "data.owner_id": {
+        "$in": [
+          "{{user.email}}",
+          "{{user.data.patrimony_id}}"
+        ]
+      }
+    },
+    "delete": {
+      "data.owner_id": {
+        "$in": [
+          "{{user.email}}",
+          "{{user.data.patrimony_id}}"
+        ]
+      }
+    }
+  }
+}

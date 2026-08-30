@@ -1,0 +1,205 @@
+{
+  "name": "InvestmentScenario",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du bailleur (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "name": {
+      "type": "string",
+      "description": "Nom du sc\u00e9nario"
+    },
+    "achat": {
+      "type": "object",
+      "description": "Param\u00e8tres d'achat",
+      "properties": {
+        "price": {
+          "type": "number",
+          "description": "Prix d'achat (\u20ac)"
+        },
+        "notary": {
+          "type": "number",
+          "description": "Frais de notaire (\u20ac)"
+        },
+        "agency": {
+          "type": "number",
+          "description": "Frais d'agence (\u20ac)"
+        },
+        "works": {
+          "type": "number",
+          "description": "Travaux (\u20ac)"
+        },
+        "furniture": {
+          "type": "number",
+          "description": "Meubles / ameublement (\u20ac)"
+        }
+      }
+    },
+    "financement": {
+      "type": "object",
+      "description": "Param\u00e8tres de financement",
+      "properties": {
+        "down_payment": {
+          "type": "number",
+          "description": "Apport (\u20ac)"
+        },
+        "loan_amount": {
+          "type": "number",
+          "description": "Montant emprunt\u00e9 (\u20ac)"
+        },
+        "rate": {
+          "type": "number",
+          "description": "Taux annuel hors assurance (%)"
+        },
+        "duration_years": {
+          "type": "number",
+          "description": "Dur\u00e9e du pr\u00eat (ann\u00e9es)"
+        },
+        "insurance": {
+          "type": "number",
+          "description": "Assurance pr\u00eat mensuelle (\u20ac/mois)"
+        },
+        "deferred_months": {
+          "type": "number",
+          "description": "Mois de diff\u00e9r\u00e9 d'amortissement"
+        }
+      }
+    },
+    "exploitation": {
+      "type": "object",
+      "description": "Param\u00e8tres d'exploitation",
+      "properties": {
+        "rent_monthly": {
+          "type": "number",
+          "description": "Loyer mensuel HC (\u20ac/mois)"
+        },
+        "charges_monthly": {
+          "type": "number",
+          "description": "Charges non r\u00e9cup\u00e9rables mensuelles (\u20ac/mois)"
+        },
+        "property_tax": {
+          "type": "number",
+          "description": "Taxe fonci\u00e8re annuelle (\u20ac)"
+        },
+        "vacancy_rate": {
+          "type": "number",
+          "description": "Taux de vacance (%)"
+        },
+        "management_fee_rate": {
+          "type": "number",
+          "description": "Frais de gestion (% du loyer encaiss\u00e9)"
+        },
+        "insurance_pno": {
+          "type": "number",
+          "description": "Assurance PNO annuelle (\u20ac)"
+        },
+        "maintenance": {
+          "type": "number",
+          "description": "Entretien annuel (\u20ac)"
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "description": "Snapshot des indicateurs calcul\u00e9s",
+      "additionalProperties": true,
+      "properties": {
+        "totalCost": {
+          "type": "number"
+        },
+        "cashInvested": {
+          "type": "number"
+        },
+        "monthlyPayment": {
+          "type": "number"
+        },
+        "monthlyInsurance": {
+          "type": "number"
+        },
+        "monthlyTotal": {
+          "type": "number"
+        },
+        "annualRentGross": {
+          "type": "number"
+        },
+        "annualCharges": {
+          "type": "number"
+        },
+        "noi": {
+          "type": "number"
+        },
+        "cashFlowMonthly": {
+          "type": "number"
+        },
+        "cashFlowAnnual": {
+          "type": "number"
+        },
+        "annualDebtService": {
+          "type": "number"
+        },
+        "grossYield": {
+          "type": "number"
+        },
+        "netYield": {
+          "type": "number"
+        },
+        "cashOnCash": {
+          "type": "number"
+        },
+        "dscr": {
+          "type": "number"
+        },
+        "ltv": {
+          "type": "number"
+        }
+      }
+    },
+    "transformed_property_id": {
+      "type": "string",
+      "description": "ID du bien cr\u00e9\u00e9 si le sc\u00e9nario a \u00e9t\u00e9 transform\u00e9"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": {
+        "$in": [
+          "{{user.email}}",
+          "{{user.data.patrimony_id}}"
+        ]
+      }
+    },
+    "read": {
+      "data.owner_id": {
+        "$in": [
+          "{{user.email}}",
+          "{{user.data.patrimony_id}}"
+        ]
+      }
+    },
+    "update": {
+      "data.owner_id": {
+        "$in": [
+          "{{user.email}}",
+          "{{user.data.patrimony_id}}"
+        ]
+      }
+    },
+    "delete": {
+      "data.owner_id": {
+        "$in": [
+          "{{user.email}}",
+          "{{user.data.patrimony_id}}"
+        ]
+      }
+    }
+  }
+}

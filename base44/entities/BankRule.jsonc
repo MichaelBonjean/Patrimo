@@ -1,0 +1,145 @@
+{
+  "name": "BankRule",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire (isolation multi-utilisateurs, ancre RLS)"
+    },
+    "patrimony_id": {
+      "type": "string",
+      "description": "Patrimoine de rattachement (optionnel, h\u00e9ritage du propri\u00e9taire)"
+    },
+    "keyword": {
+      "type": "string",
+      "description": "Mot-cl\u00e9 normalis\u00e9 \u00e0 chercher (contains, insensible \u00e0 la casse/accents) dans la description bancaire"
+    },
+    "conditions": {
+      "type": "object",
+      "description": "Conditions d\u00e9terministes suppl\u00e9mentaires (au-del\u00e0 du mot-cl\u00e9). Toutes optionnelles.",
+      "additionalProperties": true,
+      "properties": {
+        "direction": {
+          "type": "string",
+          "enum": [
+            "in",
+            "out",
+            "any"
+          ],
+          "default": "any",
+          "description": "Sens du montant : in (entr\u00e9e) / out (sortie) / any"
+        },
+        "amount_min": {
+          "type": "number",
+          "description": "Montant minimal (inclus)"
+        },
+        "amount_max": {
+          "type": "number",
+          "description": "Montant maximal (inclus)"
+        },
+        "account_id": {
+          "type": "string",
+          "description": "Identifiant de compte bancaire restreint (optionnel)"
+        }
+      }
+    },
+    "assigned_category": {
+      "type": "string",
+      "description": "Cat\u00e9gorie financi\u00e8re canonique \u00e0 affecter (ex: rent, property_insurance...). Peut \u00eatre vide si assigned_lease_id renseign\u00e9 (rapprochement de loyer)."
+    },
+    "assigned_lease_id": {
+      "type": "string",
+      "description": "Bail cible (rapprochement de loyer automatique quand l'op\u00e9ration est un loyer)"
+    },
+    "assigned_property_id": {
+      "type": "string",
+      "description": "Bien \u00e0 affecter (optionnel)"
+    },
+    "assigned_lot_id": {
+      "type": "string",
+      "description": "Lot \u00e0 affecter (optionnel)"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "R\u00e8gle active (d\u00e9sactivable sans suppression)"
+    },
+    "priority": {
+      "type": "number",
+      "default": 0,
+      "description": "Priorit\u00e9 (plus \u00e9lev\u00e9 = examin\u00e9e en premier ; g\u00e8re les conflits en faveur de la r\u00e8gle la plus sp\u00e9cifique)"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "manual",
+        "learned_from_validation",
+        "seed"
+      ],
+      "default": "manual",
+      "description": "Origine de la r\u00e8gle : manuelle / apprise d'une validation / h\u00e9rit\u00e9e"
+    },
+    "learned_from_transaction_id": {
+      "type": "string",
+      "description": "ID de la transaction ayant servi de base \u00e0 l'apprentissage (si source = learned_from_validation)"
+    },
+    "match_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Nombre de fois o\u00f9 la r\u00e8gle a effectivement reconnu une op\u00e9ration (compteur d'apprentissage)"
+    },
+    "history": {
+      "type": "array",
+      "description": "Journal horodat\u00e9 : cr\u00e9ation, \u00e9dition, activation/d\u00e9sactivation, conflit, application.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "created",
+              "edited",
+              "enabled",
+              "disabled",
+              "conflict",
+              "applied",
+              "deleted"
+            ]
+          },
+          "actor": {
+            "type": "string",
+            "description": "Email de l'auteur"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "date",
+          "action"
+        ]
+      }
+    }
+  },
+  "required": [
+    "keyword"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

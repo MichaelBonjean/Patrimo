@@ -1,0 +1,185 @@
+{
+  "name": "Lease",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "property_id": {
+      "type": "string",
+      "description": "ID du bien"
+    },
+    "lot_id": {
+      "type": "string",
+      "description": "ID du lot concern\u00e9"
+    },
+    "lease_type": {
+      "type": "string",
+      "enum": [
+        "Vide-Nu",
+        "Meubl\u00e9",
+        "Bail commercial",
+        "Bail mobilit\u00e9",
+        "Bail \u00e9tudiant",
+        "Saisonnier-Airbnb",
+        "Bail mixte",
+        "Courte dur\u00e9e"
+      ],
+      "description": "Type de bail"
+    },
+    "date_start": {
+      "type": "string",
+      "format": "date",
+      "description": "Date d'effet du bail"
+    },
+    "date_end": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de fin (\u00e9ch\u00e9ance) \u00e9ventuelle"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "futur",
+        "actif",
+        "termine",
+        "resilie"
+      ],
+      "default": "actif",
+      "description": "Statut calcul\u00e9 du bail"
+    },
+    "tenants": {
+      "type": "array",
+      "description": "Locataires du bail (colocation = plusieurs entr\u00e9es)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "entry_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "exit_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    "rent_excluding_charges": {
+      "type": "number",
+      "description": "Loyer hors charges (mensuel), hors charges"
+    },
+    "charges": {
+      "type": "number",
+      "description": "Charges (mensuel)",
+      "default": 0
+    },
+    "deposit": {
+      "type": "number",
+      "description": "Caution / d\u00e9p\u00f4t de garantie"
+    },
+    "due_day": {
+      "type": "number",
+      "description": "Jour d'\u00e9ch\u00e9ance du loyer (1-31)",
+      "default": 5
+    },
+    "payment_frequency": {
+      "type": "string",
+      "enum": [
+        "mensuel",
+        "trimestriel",
+        "semestriel",
+        "annuel"
+      ],
+      "default": "mensuel",
+      "description": "Fr\u00e9quence de paiement"
+    },
+    "indexation_type": {
+      "type": "string",
+      "enum": [
+        "IRL",
+        "ILC",
+        "ILAT",
+        "aucune"
+      ],
+      "default": "aucune",
+      "description": "Indice d'indexation du loyer"
+    },
+    "index_reference": {
+      "type": "string",
+      "description": "Trimestre/ann\u00e9e de l'indice de r\u00e9f\u00e9rence initial (ex : T1 2024)"
+    },
+    "index_value_initial": {
+      "type": "number",
+      "description": "Valeur de l'indice de r\u00e9f\u00e9rence initial (IRL/ILC/ILAT) \u2014 \u00e0 la signature ou derni\u00e8re r\u00e9vision"
+    },
+    "index_value_current": {
+      "type": "number",
+      "description": "Derni\u00e8re valeur connue de l'indice de r\u00e9f\u00e9rence (indice courant publi\u00e9)"
+    },
+    "last_revision_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de derni\u00e8re r\u00e9vision du loyer"
+    },
+    "next_revision_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de prochaine r\u00e9vision"
+    },
+    "furnished": {
+      "type": "boolean",
+      "description": "Bail meubl\u00e9",
+      "default": false
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes / clauses particuli\u00e8res"
+    },
+    "migrated_from": {
+      "type": "string",
+      "description": "Origine du bail (lot_migration_v1 si issu de la migration)"
+    }
+  },
+  "required": [
+    "property_id",
+    "lot_id",
+    "date_start",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "name": "RentDue",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "lease_id": {
+      "type": "string",
+      "description": "ID du bail concern\u00e9"
+    },
+    "property_id": {
+      "type": "string",
+      "description": "ID du bien"
+    },
+    "lot_id": {
+      "type": "string",
+      "description": "ID du lot"
+    },
+    "year": {
+      "type": "number",
+      "description": "Ann\u00e9e de l'\u00e9ch\u00e9ance"
+    },
+    "month": {
+      "type": "number",
+      "description": "Mois (1-12)"
+    },
+    "period": {
+      "type": "string",
+      "description": "P\u00e9riode YYYY-MM (cl\u00e9 naturelle)"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date d'\u00e9ch\u00e9ance (jour de paiement du bail)"
+    },
+    "rent_excluding_charges": {
+      "type": "number",
+      "description": "Loyer hors charges"
+    },
+    "charges": {
+      "type": "number",
+      "description": "Charges",
+      "default": 0
+    },
+    "additional_amount": {
+      "type": "number",
+      "description": "Frais suppl\u00e9mentaires (provisions, etc.)",
+      "default": 0
+    },
+    "total_due": {
+      "type": "number",
+      "description": "Total d\u00fb = HC + charges + additional"
+    },
+    "paid_amount": {
+      "type": "number",
+      "description": "Total affect\u00e9 \u00e0 cette \u00e9ch\u00e9ance",
+      "default": 0
+    },
+    "balance": {
+      "type": "number",
+      "description": "Reste \u00e0 payer (total_due - paid_amount, peut \u00eatre n\u00e9gatif si trop-per\u00e7u)",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "unpaid",
+        "partial",
+        "paid",
+        "overpaid"
+      ],
+      "default": "unpaid",
+      "description": "Statut calcul\u00e9 de l'\u00e9ch\u00e9ance"
+    },
+    "tenant_name": {
+      "type": "string",
+      "description": "Nom du locataire (snapshot)"
+    },
+    "generated_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de g\u00e9n\u00e9ration"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes"
+    }
+  },
+  "required": [
+    "lease_id",
+    "property_id",
+    "lot_id",
+    "year",
+    "month",
+    "period",
+    "due_date",
+    "total_due",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

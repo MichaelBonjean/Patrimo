@@ -1,0 +1,95 @@
+{
+  "name": "PersonalReminder",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire (isolation multi-utilisateurs, ancre RLS)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "patrimony_id": {
+      "type": "string",
+      "description": "Patrimoine de rattachement (snapshot owner_id)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Titre court du rappel"
+    },
+    "note": {
+      "type": "string",
+      "description": "Note / d\u00e9tail libre"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date d'\u00e9ch\u00e9ance du rappel (jour vis\u00e9)"
+    },
+    "due_time": {
+      "type": "string",
+      "description": "Heure \u00e9ventuelle (HH:MM)"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "normal",
+        "high"
+      ],
+      "default": "normal",
+      "description": "Priorit\u00e9 du rappel"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "done",
+        "snoozed"
+      ],
+      "default": "pending",
+      "description": "Statut : pending / done / snoozed"
+    },
+    "snoozed_until": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de fin de report (si snoozed)"
+    },
+    "done_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date de cl\u00f4ture (passage \u00e0 done)"
+    },
+    "property_id": {
+      "type": "string",
+      "description": "Bien li\u00e9 (optionnel)"
+    },
+    "tags": {
+      "type": "array",
+      "description": "Tags libres",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "title",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

@@ -1,0 +1,354 @@
+{
+  "name": "DocumentImport",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "ID de l'utilisateur propri\u00e9taire (User.id)"
+    },
+    "patrimony_id": {
+      "type": "string",
+      "description": "Patrimoine de rattachement (email / id patrimoine, isolation multi-utilisateurs)"
+    },
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire (ancre RLS, isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL du fichier original upload\u00e9 (persist\u00e9 90 j puis purg\u00e9)"
+    },
+    "file_name": {
+      "type": "string",
+      "description": "Nom du fichier d'origine"
+    },
+    "file_size": {
+      "type": "number",
+      "description": "Taille du fichier en octets"
+    },
+    "mime_type": {
+      "type": "string",
+      "description": "Type MIME du fichier"
+    },
+    "pages_count": {
+      "type": "number",
+      "description": "Nombre de pages d\u00e9tect\u00e9es (OCR / vision)"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "upload_web",
+        "upload_mobile",
+        "email",
+        "camera"
+      ],
+      "default": "upload_web",
+      "description": "Canal d'ingestion"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "uploaded",
+        "ocr_running",
+        "classifying",
+        "extracting",
+        "paused",
+        "awaiting_review",
+        "committed",
+        "cancelled",
+        "rejected",
+        "failed"
+      ],
+      "default": "queued",
+      "description": "State machine : queued (en file) \u2192 uploaded \u2192 ocr_running \u2192 classifying \u2192 extracting \u2192 awaiting_review \u2192 committed. Branches : paused (suspendu), cancelled (abandonn\u00e9), failed (irr\u00e9cup\u00e9rable), rejected (rejet\u00e9). Un seul document en analyse technique active (ocr_running/classifying/extracting) par patrimoine \u00e0 la fois."
+    },
+    "queue_position": {
+      "type": "number",
+      "description": "Rang FIFO dans la file d'analyse (1 = prochain). Persist\u00e9 \u00e0 la cr\u00e9ation ; l'orchestrateur respecte aussi created_date."
+    },
+    "analysis_started_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "D\u00e9but effectif de l'analyse technique (passage en ocr_running par l'orchestrateur)"
+    },
+    "analysis_finished_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Fin de l'analyse (awaiting_review / committed / cancelled / failed / paused d\u00e9finitive)"
+    },
+    "current_stage": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "ocr",
+        "ocr_done",
+        "classifying",
+        "extraction",
+        "merging",
+        "awaiting_review",
+        "paused",
+        "cancelled",
+        "failed"
+      ],
+      "description": "\u00c9tape technique fine pour la barre de progression (distincte du status global)"
+    },
+    "progress_percent": {
+      "type": "number",
+      "description": "Pourcentage de progression r\u00e9el (pond\u00e9r\u00e9 par \u00e9tape). Upload 0-10, OCR 10-35, Classification 35-45, Extraction 45-85, Merge 85-95, Validation 95-100. Ne monte pas artificiellement."
+    },
+    "processed_pages": {
+      "type": "number",
+      "description": "Pages/chunks effectivement trait\u00e9s \u00e0 l'instant (pour l'affichage \u00ab page 18 / 27 \u00bb)"
+    },
+    "total_pages": {
+      "type": "number",
+      "description": "Nombre total de pages/chunks \u00e0 traiter (connu apr\u00e8s OCR)"
+    },
+    "last_checkpoint": {
+      "type": "string",
+      "description": "Dernier point de reprise atteint (ex: ocr_complete, extraction_chunk_12_complete). Sert \u00e0 ne pas recommencer depuis z\u00e9ro lors d'une reprise."
+    },
+    "retry_count": {
+      "type": "number",
+      "description": "Nombre de tentatives automatiques (max 3 avant mise en pause d\u00e9finitive)",
+      "default": 0
+    },
+    "pause_reason": {
+      "type": "string",
+      "description": "Motif lisible de la pause (utilisateur, service OCR indisponible, heartbeat perdu, limite mensuelle\u2026)"
+    },
+    "pause_origin": {
+      "type": "string",
+      "enum": [
+        "user",
+        "system",
+        "error"
+      ],
+      "description": "Origine de la pause : user (action volontaire), system (limite/quota), error (erreur r\u00e9cup\u00e9rable)"
+    },
+    "processing_lock_id": {
+      "type": "string",
+      "description": "Jeton de verrou pos\u00e9 par l'orchestrateur lors du claim. ingestDocument ne poursuit que si son lock_id correspond (garantit un seul document analys\u00e9 \u00e0 la fois, m\u00eame avec deux onglets). Null hors analyse."
+    },
+    "processing_started_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Instant d'acquisition du verrou (claim) \u2014 base du d\u00e9tecteur de lock orphelin"
+    },
+    "last_heartbeat_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Dernier signal de vie de l'analyse. Un statut technique actif sans heartbeat r\u00e9cent (>15 min) est consid\u00e9r\u00e9 orphelin et r\u00e9cup\u00e9r\u00e9."
+    },
+    "cancellation_requested": {
+      "type": "boolean",
+      "default": false,
+      "description": "Demande d'arr\u00eat d\u00e9finitif (annulation coop\u00e9rative). ingestDocument le consulte aux points de coop\u00e9ration et passe en cancelled, sans cr\u00e9er aucune donn\u00e9e m\u00e9tier."
+    },
+    "pause_requested": {
+      "type": "boolean",
+      "default": false,
+      "description": "Demande de pause utilisateur. ingestDocument le consulte aux points de coop\u00e9ration, sauvegarde le checkpoint et passe en paused."
+    },
+    "classification": {
+      "type": "string",
+      "enum": [
+        "bail_alur",
+        "acte_vente_notarie",
+        "compromis",
+        "offre_pret_bancaire",
+        "tableau_amortissement",
+        "releve_bancaire",
+        "releve_caf",
+        "taxe_fonciere",
+        "diagnostic_technique",
+        "assurance_pno",
+        "appel_charges",
+        "facture",
+        "statuts_societe",
+        "kbis_societe",
+        "cession_parts",
+        "pv_assemblee",
+        "pv_societe",
+        "augmentation_capital",
+        "reduction_capital",
+        "beneficiaires_effectifs",
+        "sci_statuts_kbis",
+        "etat_des_lieux",
+        "quittance_loyer",
+        "bail",
+        "acte_vente",
+        "offre_pret",
+        "dpe",
+        "assurance",
+        "quittance",
+        "avis_impot",
+        "ag_copropriete",
+        "decompte_charges",
+        "autre",
+        "unknown"
+      ],
+      "default": "unknown",
+      "description": "Type de document class\u00e9 par l'IA (DocumentClassifier central). Cl\u00e9s canoniques (documentTypes) + legacy accept\u00e9es (normalis\u00e9es au commit)."
+    },
+    "classification_confidence": {
+      "type": "number",
+      "description": "Confiance de classification (0-1)"
+    },
+    "classification_alternatives": {
+      "type": "array",
+      "description": "Alternatives propos\u00e9es par le classificateur (tri\u00e9es par confiance d\u00e9croissante, \u2264 3)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "type",
+          "confidence"
+        ]
+      }
+    },
+    "classification_explanation": {
+      "type": "string",
+      "description": "Justification lisible de la classification (mots-cl\u00e9s ou raison LLM)"
+    },
+    "ocr_text": {
+      "type": "string",
+      "description": "Texte extrait (OCR / vision) \u2014 donn\u00e9es sensibles masqu\u00e9es RGPD"
+    },
+    "extracted_data": {
+      "type": "object",
+      "description": "Donn\u00e9es structur\u00e9es extraites selon le type (sch\u00e9ma sp\u00e9cialis\u00e9)",
+      "additionalProperties": true
+    },
+    "confidence_per_field": {
+      "type": "object",
+      "description": "Confiance par champ extrait (field -> 0-1)",
+      "additionalProperties": true
+    },
+    "extraction_provenance": {
+      "type": "object",
+      "description": "Provenance d'extraction par chunks : field -> { page, confidence, source_text }. Garantit la tra\u00e7abilit\u00e9 d'une info trouv\u00e9e page N (ex. page 27).",
+      "additionalProperties": true
+    },
+    "extraction_conflicts": {
+      "type": "array",
+      "description": "Propositions de conflits : valeurs contradictoires entre pages/chunks (pas de choix arbitraire). Items { field, status, candidates: [{ value, confidence, page, source_text }] }.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "unresolved",
+              "resolved"
+            ]
+          },
+          "candidates": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {},
+                "confidence": {
+                  "type": "number"
+                },
+                "page": {
+                  "type": "number"
+                },
+                "source_text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "page",
+                "source_text"
+              ]
+            }
+          }
+        },
+        "required": [
+          "field",
+          "status"
+        ]
+      }
+    },
+    "created_from_entities": {
+      "type": "array",
+      "description": "R\u00e9f\u00e9rences des entit\u00e9s cr\u00e9\u00e9es/mises \u00e0 jour au commit",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "id",
+          "label"
+        ]
+      }
+    },
+    "error_message": {
+      "type": "string",
+      "description": "Message d'erreur / warning (\u00e9chec, > 20 pages, conflit d'extraction\u2026)"
+    },
+    "cost_cents": {
+      "type": "number",
+      "description": "Co\u00fbt d'analyse en centimes (tracking m\u00e9trologie)"
+    },
+    "committed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date de validation/commit"
+    },
+    "committed_by": {
+      "type": "string",
+      "description": "Email de l'utilisateur ayant valid\u00e9"
+    }
+  },
+  "required": [
+    "user_id",
+    "owner_id",
+    "file_url",
+    "file_name",
+    "source",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

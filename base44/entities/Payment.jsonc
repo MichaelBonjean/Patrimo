@@ -1,0 +1,118 @@
+{
+  "name": "Payment",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "lease_id": {
+      "type": "string",
+      "description": "ID du bail concern\u00e9"
+    },
+    "rent_due_id": {
+      "type": "string",
+      "description": "Premi\u00e8re \u00e9ch\u00e9ance affect\u00e9e (principale, optionnel)"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date du paiement"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Montant total du paiement"
+    },
+    "payer_type": {
+      "type": "string",
+      "enum": [
+        "tenant",
+        "caf",
+        "guarantor",
+        "insurance",
+        "other"
+      ],
+      "description": "Qui a pay\u00e9"
+    },
+    "payer_name": {
+      "type": "string",
+      "description": "Nom du payeur (snapshot)"
+    },
+    "transaction_id": {
+      "type": "string",
+      "description": "ID transaction bancaire source"
+    },
+    "method": {
+      "type": "string",
+      "enum": [
+        "virement",
+        "ch\u00e8que",
+        "esp\u00e8ces",
+        "pr\u00e9l\u00e8vement",
+        "caf",
+        "cb",
+        "autre"
+      ],
+      "description": "Moyen de paiement"
+    },
+    "reference": {
+      "type": "string",
+      "description": "R\u00e9f\u00e9rence / num\u00e9ro"
+    },
+    "allocations": {
+      "type": "array",
+      "description": "R\u00e9partition du paiement sur plusieurs \u00e9ch\u00e9ances (many-to-many)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rent_due_id": {
+            "type": "string",
+            "description": "ID de l'\u00e9ch\u00e9ance affect\u00e9e"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Montant affect\u00e9 \u00e0 cette \u00e9ch\u00e9ance"
+          }
+        },
+        "required": [
+          "rent_due_id",
+          "amount"
+        ]
+      }
+    },
+    "unallocated": {
+      "type": "number",
+      "description": "Montant non affect\u00e9 (cr\u00e9dit / avoir en attente d'affectation)",
+      "default": 0
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes"
+    }
+  },
+  "required": [
+    "lease_id",
+    "date",
+    "amount",
+    "payer_type"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

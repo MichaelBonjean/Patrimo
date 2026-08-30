@@ -1,0 +1,119 @@
+{
+  "name": "BankAccount",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "patrimony_id": {
+      "type": "string",
+      "description": "Patrimoine de rattachement (ancre multi-utilisateurs, h\u00e9rit\u00e9 du propri\u00e9taire)."
+    },
+    "account_name": {
+      "type": "string",
+      "description": "Libell\u00e9 du compte (ex: \u00ab Compte CIC SCI Irigny \u00bb)"
+    },
+    "bank_name": {
+      "type": "string",
+      "description": "\u00c9tablissement bancaire"
+    },
+    "iban_masked": {
+      "type": "string",
+      "description": "IBAN masqu\u00e9 (FR76\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u20221234) \u2014 jamais l'IBAN complet"
+    },
+    "account_masked_id": {
+      "type": "string",
+      "description": "Identifiant de compte stable utilis\u00e9 comme account_id c\u00f4t\u00e9 BankTransaction (masqu\u00e9). Sert de cl\u00e9 de matching import \u2194 compte."
+    },
+    "provider_account_id": {
+      "type": "string",
+      "description": "Identifiant de compte fourni par le fournisseur/distant (Open Banking, bankin\u2026). Renforce le matching import \u2194 compte (d\u00e9terministe si pr\u00e9sent)."
+    },
+    "currency": {
+      "type": "string",
+      "default": "EUR",
+      "description": "Devise"
+    },
+    "account_type": {
+      "type": "string",
+      "enum": [
+        "checking",
+        "savings",
+        "loan",
+        "pea",
+        "other"
+      ],
+      "default": "checking",
+      "description": "Type de compte"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "manual",
+        "csv_import",
+        "pdf_import",
+        "caf",
+        "bankin",
+        "open_banking",
+        "legacy"
+      ],
+      "default": "manual",
+      "description": "Origine de cr\u00e9ation du compte (manuel vs import)"
+    },
+    "confirmed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Ownership confirm\u00e9e par l'utilisateur (m\u00e9morisation). false = compte cr\u00e9\u00e9 en attente de confirmation du Holder ; true = les imports suivants ne reposent plus la question."
+    },
+    "holder_id": {
+      "type": "string",
+      "description": "D\u00e9tenteur du compte (Holder). Personne physique OU structure (SCI/SARL/SAS\u2026). D\u00e9termine la pr\u00e9somption d'affectation des op\u00e9rations (contexte d'analyse par d\u00e9faut)."
+    },
+    "holder_type_snapshot": {
+      "type": "string",
+      "description": "Snapshot du type de d\u00e9tenteur (Personne physique / SCI / SARL\u2026) au moment de la derni\u00e8re synchro."
+    },
+    "property_id": {
+      "type": "string",
+      "description": "Bien d\u00e9di\u00e9 si le compte est attribu\u00e9 \u00e0 un seul bien (optionnel). Une d\u00e9pense g\u00e9n\u00e9rale de structure (cabinet comptable\u2026) ne doit PAS \u00eatre forc\u00e9e vers ce Property."
+    },
+    "label_color": {
+      "type": "string",
+      "description": "Couleur d'affichage (sidebar / filtre)"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Compte actif (les imports d\u00e9sactivent les comptes clos)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes"
+    }
+  },
+  "required": [
+    "account_name",
+    "holder_id",
+    "active"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

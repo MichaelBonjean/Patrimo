@@ -1,0 +1,123 @@
+{
+  "name": "Transaction",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "property_id": {
+      "type": "string",
+      "description": "ID du bien. Optionnel : une d\u00e9pense de structure (SCI) ou fiscale peut ne pas \u00eatre affect\u00e9e \u00e0 un bien. Cf. allocation_type / holder_id / loan_id / tax_scope."
+    },
+    "lot_id": {
+      "type": "string",
+      "description": "ID du lot (optionnel)"
+    },
+    "holder_id": {
+      "type": "string",
+      "description": "D\u00e9tenteur / structure d'affectation (SCI, SARL, personne physique). Une d\u00e9pense g\u00e9n\u00e9rale deSCI (ex: comptable) est affect\u00e9e au holder, SANS property_id forc\u00e9."
+    },
+    "loan_id": {
+      "type": "string",
+      "description": "Pr\u00eat affect\u00e9 (convention 'loan:<property_id>'). Une mensualit\u00e9 est affect\u00e9e au pr\u00eat, pas directement au bien."
+    },
+    "tax_scope": {
+      "type": "string",
+      "enum": [
+        "is",
+        "ir",
+        "tva",
+        "other"
+      ],
+      "description": "P\u00e9rim\u00e8tre fiscal (IS, IR, TVA\u2026). Une transaction fiscale est exclue du cash-flow d'exploitation."
+    },
+    "allocation_type": {
+      "type": "string",
+      "enum": [
+        "property",
+        "lot",
+        "holder",
+        "loan",
+        "tax",
+        "internal_transfer",
+        "unallocated"
+      ],
+      "description": "Type d'affectation financi\u00e8re. D\u00e9rive des champs (cf. allocationEngine.resolveAllocationType) : property | lot | holder | loan | tax | internal_transfer | unallocated."
+    },
+    "year": {
+      "type": "number",
+      "description": "Ann\u00e9e"
+    },
+    "month": {
+      "type": "number",
+      "description": "Mois (1-12)"
+    },
+    "category": {
+      "type": "string",
+      "description": "Cl\u00e9 stable de cat\u00e9gorie financi\u00e8re (snake_case) \u2014 cf. base44/shared/financeCategories.ts. Jamais un libell\u00e9 fran\u00e7ais comme identifiant."
+    },
+    "category_label": {
+      "type": "string",
+      "description": "Libell\u00e9 fran\u00e7ais d'affichage (snapshot). Pour le fallback 'other', conserve le libell\u00e9 d'origine."
+    },
+    "amount": {
+      "type": "number",
+      "description": "Montant (positif=entr\u00e9e, n\u00e9gatif=sortie)"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "income",
+        "expense"
+      ],
+      "description": "Type: entr\u00e9e ou sortie"
+    },
+    "note": {
+      "type": "string",
+      "description": "Note/commentaire / libell\u00e9 bancaire (sert au matching des virements internes)"
+    },
+    "bank_import_id": {
+      "type": "string",
+      "description": "ID import bancaire source"
+    },
+    "transfer_pair_id": {
+      "type": "string",
+      "description": "ID de la transaction contrepartie du virement inter-comptes (liage 1-1). Vide si non li\u00e9."
+    },
+    "transfer_method": {
+      "type": "string",
+      "enum": [
+        "auto",
+        "manual"
+      ],
+      "description": "Origine du liage : 'auto' (d\u00e9tection automatique valid\u00e9e) ou 'manual' (liage manuel)."
+    }
+  },
+  "required": [
+    "year",
+    "month",
+    "category",
+    "amount",
+    "type"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

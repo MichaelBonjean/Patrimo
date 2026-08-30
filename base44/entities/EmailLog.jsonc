@@ -1,0 +1,125 @@
+{
+  "name": "EmailLog",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du bailleur \u00e9metteur (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "to": {
+      "type": "string",
+      "description": "Adresse destinataire"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Sujet de l'email"
+    },
+    "template": {
+      "type": "string",
+      "enum": [
+        "quittance",
+        "rent_reminder",
+        "mise_en_demeure",
+        "tenant_portal_invitation",
+        "custom"
+      ],
+      "description": "Template transactionnel utilis\u00e9"
+    },
+    "variables": {
+      "type": "object",
+      "description": "Variables de template inject\u00e9es (snapshot)",
+      "additionalProperties": true
+    },
+    "attachments": {
+      "type": "array",
+      "description": "Pi\u00e8ces jointes (URLs + noms, snapshot)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url",
+          "filename"
+        ]
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "sent",
+        "failed",
+        "delivered"
+      ],
+      "default": "queued",
+      "description": "Statut de l'envoi transactionnel"
+    },
+    "provider": {
+      "type": "string",
+      "description": "Fournisseur utilis\u00e9 (brevo/resend/postmark)"
+    },
+    "message_id": {
+      "type": "string",
+      "description": "Identifiant renvoy\u00e9 par le fournisseur"
+    },
+    "error": {
+      "type": "string",
+      "description": "Message d'erreur \u00e9ventuel"
+    },
+    "attempted_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Nombre de tentatives effectu\u00e9es (retry contr\u00f4l\u00e9)"
+    },
+    "sent_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date d'envoi effectif"
+    },
+    "error_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date du dernier \u00e9chec"
+    },
+    "related_entity_type": {
+      "type": "string",
+      "description": "Type d'entit\u00e9 li\u00e9e (quittance, impaye, tenant_access)"
+    },
+    "related_entity_id": {
+      "type": "string",
+      "description": "ID de l'entit\u00e9 li\u00e9e"
+    }
+  },
+  "required": [
+    "to",
+    "subject",
+    "template",
+    "status",
+    "provider"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

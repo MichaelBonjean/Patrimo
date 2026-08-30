@@ -1,0 +1,78 @@
+{
+  "name": "PropertyHolder",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire (isolation multi-utilisateurs)"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "property_id": {
+      "type": "string",
+      "description": "ID du bien"
+    },
+    "holder_id": {
+      "type": "string",
+      "description": "ID du d\u00e9teneur (personne physique ou structure)"
+    },
+    "share_percent": {
+      "type": "number",
+      "description": "Part en % (ex: 50 pour 50%)"
+    },
+    "demembrement": {
+      "type": "string",
+      "enum": [
+        "pleine_propriete",
+        "usufruit",
+        "nue_propriete"
+      ],
+      "default": "pleine_propriete",
+      "description": "D\u00e9membrement de la d\u00e9tention du bien"
+    },
+    "entry_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date d'entr\u00e9e (d\u00e9but d'effet)"
+    },
+    "exit_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de sortie (si c\u00e9d\u00e9). Null = toujours actif."
+    },
+    "source_document_id": {
+      "type": "string",
+      "description": "ID du DocumentImport source (acte de vente) \u00e9tablissant la relation"
+    },
+    "source_page": {
+      "type": "number",
+      "description": "Page du document source"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes"
+    }
+  },
+  "required": [
+    "property_id",
+    "holder_id",
+    "share_percent"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

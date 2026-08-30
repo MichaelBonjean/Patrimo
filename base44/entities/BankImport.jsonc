@@ -1,0 +1,138 @@
+{
+  "name": "BankImport",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Email du propri\u00e9taire"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "description": "Donn\u00e9e de d\u00e9monstration",
+      "default": false
+    },
+    "patrimony_id": {
+      "type": "string",
+      "description": "Patrimoine de rattachement (h\u00e9rit\u00e9 du propri\u00e9taire)."
+    },
+    "import_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date du lot d'import (date d'ex\u00e9cution ou premi\u00e8re op\u00e9ration du lot)."
+    },
+    "description": {
+      "type": "string",
+      "description": "Libell\u00e9 du lot d'import (ex: \u00ab Lot d'import \u2014 relev\u00e9 CIC ao\u00fbt 2025 (42 lignes) \u00bb)."
+    },
+    "provider": {
+      "type": "string",
+      "description": "Fournisseur source du lot (ex: 'cic', 'bankin', 'caf', 'open_banking', 'manual')."
+    },
+    "source_format": {
+      "type": "string",
+      "enum": [
+        "csv",
+        "pdf",
+        "excel",
+        "caf",
+        "open_banking",
+        "manual"
+      ],
+      "description": "Format du fichier source du lot."
+    },
+    "file_name": {
+      "type": "string",
+      "description": "Nom du fichier source du lot (audit)."
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL du fichier source upload\u00e9 (audit, persist\u00e9)."
+    },
+    "bank_category": {
+      "type": "string",
+      "description": "LEGACY \u2014 snapshot cat\u00e9gorie bancaire (import ligne-\u00e0-ligne historique). Vide pour un lot canonique."
+    },
+    "amount": {
+      "type": "number",
+      "description": "LEGACY \u2014 montant ligne (historique). Vaut 0 pour un lot canonique (le montant vit dans BankTransaction.amount)."
+    },
+    "bank_notes": {
+      "type": "string",
+      "description": "LEGACY \u2014 notes ligne (historique)."
+    },
+    "account": {
+      "type": "string",
+      "description": "LEGACY \u2014 compte ligne (historique). Le compte canonique vit dans BankAccount (bank_account_id sur BankTransaction)."
+    },
+    "labels": {
+      "type": "string",
+      "description": "Labels"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "categorized",
+        "ignored",
+        "failed"
+      ],
+      "default": "pending",
+      "description": "Statut du lot : pending (lot cr\u00e9\u00e9, lignes brutes en cours) / categorized (lot cl\u00f4tur\u00e9, lignes rapproch\u00e9es) / ignored / failed"
+    },
+    "rows_total": {
+      "type": "number",
+      "description": "Nombre total de lignes brutes du lot."
+    },
+    "rows_created": {
+      "type": "number",
+      "description": "Nombre de BankTransaction + Transaction cr\u00e9\u00e9es \u00e0 l'issue du lot."
+    },
+    "rows_skipped": {
+      "type": "number",
+      "description": "Nombre de lignes \u00e9cart\u00e9es (doublon exact au r\u00e9import)."
+    },
+    "rows_failed": {
+      "type": "number",
+      "description": "Nombre de lignes dont la Transaction m\u00e9tier a \u00e9chou\u00e9 (brute pr\u00e9serv\u00e9e en status=failed)."
+    },
+    "assigned_property_id": {
+      "type": "string",
+      "description": "LEGACY \u2014 bien affect\u00e9 (ligne historique). L'affectation canonique vit sur BankTransaction/Transaction."
+    },
+    "assigned_category": {
+      "type": "string",
+      "description": "LEGACY \u2014 cat\u00e9gorie affect\u00e9e (ligne historique)."
+    },
+    "assigned_lot_id": {
+      "type": "string",
+      "description": "LEGACY \u2014 lot affect\u00e9 (ligne historique)."
+    },
+    "transaction_id": {
+      "type": "string",
+      "description": "LEGACY \u2014 Transaction cr\u00e9\u00e9e (ligne historique)."
+    },
+    "batch_id": {
+      "type": "string",
+      "description": "ID logique du lot d'import (slug temporel, ex: unified-1759000000000)."
+    }
+  },
+  "required": [
+    "import_date",
+    "description",
+    "amount"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "read": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "update": {
+      "data.owner_id": "{{user.email}}"
+    },
+    "delete": {
+      "data.owner_id": "{{user.email}}"
+    }
+  }
+}

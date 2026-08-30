@@ -1,0 +1,20 @@
+// Libellés des types de documents — partagés par l'UI de « Voir la source ».
+export const CLASS_LABELS = {
+  bail_alur: 'Bail (ALUR)',
+  acte_vente_notarie: 'Acte de vente notarié',
+  compromis: 'Compromis de vente',
+  offre_pret_bancaire: 'Offre de prêt bancaire',
+  tableau_amortissement: "Tableau d'amortissement",
+  releve_bancaire: 'Relevé bancaire',
+  releve_caf: 'Relevé CAF / APL',
+  taxe_fonciere: 'Taxe foncière',
+  diagnostic_technique: 'Diagnostic technique (DPE)',
+  assurance_pno: 'Assurance PNO',
+  appel_charges: 'Appel de charges',
+  facture: 'Facture',
+  sci_statuts_kbis: 'Statuts / K-bis (SCI)',
+  etat_des_lieux: 'État des lieux',
+  quittance_loyer: 'Quittance de loyer',
+  autre: 'Autre',
+  unknown: 'Non classé',
+};
